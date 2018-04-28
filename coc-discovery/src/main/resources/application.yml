@@ -1,0 +1,153 @@
+###==========================================================================================###
+## 部署
+#  重要的外部参数
+#  --eureka.client.service-url.defaultZone="http://192.168.0.166:8761/eureka/,http://192.168.0.166:8762/eureka/"
+#  --spring.cloud.config.label
+#  --spring.cloud.config.profile
+#  --eureka.instance.ip-address
+#
+#  可选的外部参数
+#  -Dspring.cloud.inetutils.preferredNetworks=192.168.0
+#  --spring.profiles.active=fast-discovery
+#
+#  例子
+#  --eureka.instance.ip-address=192.168.0.164
+#  --eureka.client.service-url.defaultZone="http://192.168.0.166:8761/eureka/"
+#  --spring.cloud.config.label=laptop
+#  --spring.cloud.config.profile=dev
+#  --spring.profiles.active=dev,fast-discovery
+#
+###==========================================================================================###
+server:
+  port: 18800
+
+logging:
+  level:
+    #org.springframework.cache: DEBUG
+    #org.asynchttpclient: DEBUG
+    org.springframework.amqp.rabbit: INFO
+    me.shufork.biz.mq.consumer: INFO
+
+info:
+  version: '@project.version@'
+
+shufork.sc.coc.discovery:
+  enabled: false
+  clan-fetch:
+    size: 2
+    error-detect : 10
+    rate: 15000 # in milliseconds
+    init-delay: 30000  # in milliseconds
+
+liquibase:
+  change-log: classpath:db/changelog/changelog.xml
+  default-schema: db_coc_discovery
+  drop-first: false
+  enabled: true
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none # TODO: set to none
+  cloud:
+#    inetutils:
+#      preferredNetworks: # TODO : overwrite
+#        - 192.168
+#        - 10.11
+    stream:
+      default:
+        content-type: application/json
+      bindings:
+        coc_io_task_created_output:
+          binder: rabbit
+          destination: cocIoTaskCreated
+          producer:
+            required-groups: default
+        coc_clan_found_input:
+          binder: rabbit
+          destination: clanFound
+          group: default
+        coc_player_found_input:
+          binder: rabbit
+          destination: playerFound
+          group: default
+        coc_player_detailed_info_loaded_input:
+          binder: rabbit
+          destination: playerDetailedInfoLoaded
+          group: tracker
+        coc_clan_detailed_info_loaded_input:
+          binder: rabbit
+          destination: clanDetailedInfoLoaded
+          group: tracker
+        coc_state_notification_input:
+          binder: rabbit
+          destination: cocServerStateNotification
+      rabbit:
+        bindings:
+          coc_clan_found_input:
+            consumer:
+              acknowledgeMode: AUTO
+              durableSubscription: true
+              prefetch: 1
+              requeueRejected: true
+              autoBindDlq: true
+              republishToDlq: true
+              dlqMaxLength: 1000
+          coc_player_found_input:
+            consumer:
+              acknowledgeMode: AUTO
+              durableSubscription: true
+              prefetch: 1
+              requeueRejected: true
+              autoBindDlq: true
+              republishToDlq: true
+              dlqMaxLength: 1000
+          coc_player_detailed_info_loaded_input:
+            consumer:
+              acknowledgeMode: AUTO
+              durableSubscription: true
+              prefetch: 1
+              requeueRejected: true
+              autoBindDlq: true
+              republishToDlq: true
+              dlqMaxLength: 100
+          coc_clan_detailed_info_loaded_input:
+            consumer:
+              acknowledgeMode: AUTO
+              durableSubscription: true
+              prefetch: 1
+              requeueRejected: true
+              autoBindDlq: true
+              republishToDlq: true
+              dlqMaxLength: 100
+          coc_state_notification_input:
+            consumer:
+              exchangeType: fanout
+              exclusive: true
+              acknowledgeMode: AUTO
+              durableSubscription: false
+              prefetch: 1
+              requeueRejected: false
+              autoBindDlq: false
+              republishToDlq: false
+
+---
+spring:
+  profiles: dev
+
+---
+spring:
+  profiles: test
+
+---
+spring:
+  profiles: fast-discovery
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+

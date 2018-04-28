@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sc-coc</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <parent>
+		<groupId>me.shufork.jaracks</groupId>
+		<artifactId>cloudware-starter</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <agql-coc-webapi.version>0.1.6-SNAPSHOT</agql-coc-webapi.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ibasco.agql</groupId>
+            <artifactId>agql-coc-webapi</artifactId>
+            <version>${agql-coc-webapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+	
+    <modules>
+        <module>coc-io</module>
+        <module>coc-common</module>
+        <module>coc-player</module>
+        <module>coc-clan</module>
+        <module>coc-discovery</module>
+    </modules>
+</project>

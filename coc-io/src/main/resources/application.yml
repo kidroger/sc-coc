@@ -1,0 +1,145 @@
+###==========================================================================================###
+## 部署
+#  重要的外部参数
+#  --eureka.client.service-url.defaultZone="http://192.168.0.166:8761/eureka/,http://192.168.0.166:8762/eureka/"
+#  --spring.cloud.config.label
+#  --spring.cloud.config.profile
+#  --eureka.instance.ip-address
+#  --super-cell.coc.api-token
+#
+#  可选的外部参数
+#  -Dspring.cloud.inetutils.preferredNetworks=192.168.0
+#  --spring.profiles.active=fast-discovery
+#
+#  例子
+#  --eureka.instance.ip-address=192.168.0.164
+#  --eureka.client.service-url.defaultZone="http://192.168.0.166:8761/eureka/"
+#  --spring.cloud.config.label=laptop
+#  --spring.cloud.config.profile=dev
+#  --spring.profiles.active=dev,fast-discovery
+#
+###==========================================================================================###
+
+server:
+  port: 18500
+
+logging:
+  level:
+    #org.springframework.cache: DEBUG
+    #com.ibasco.agql: INFO
+    #org.asynchttpclient: DEBUG
+    org.springframework.amqp.rabbit: INFO
+
+info:
+  version: '@project.version@'
+
+super-cell:
+  coc:
+     # see https://developer.clashofclans.com/#/
+    api-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjU0NGEwN2UzLTlhZWEtNGQzMS1iZWQ0LTI5NTZiNmM4YmVjOSIsImlhdCI6MTUyMzcwNjAwMSwic3ViIjoiZGV2ZWxvcGVyL2ZjODFlOGZmLTZiNTEtNzM1My1kMzRlLWU4NTU1YmUxYzM0NyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE4Mi4xMzguMTgxLjI0NSJdLCJ0eXBlIjoiY2xpZW50In1dfQ.zXYYS2kup5uZVEtGm5cFfvcUFBqGuk7x-zl6SUuEFOtB3M1XF4xqRsd9owLIkgMZpxcBMc5OqmnUkyCh3FnlzA
+
+spring:
+  cloud:
+#    inetutils:
+#      preferredNetworks: # TODO : overwrite
+#        - 192.168
+#        - 10.11
+    stream:
+      default:
+        content-type: application/json
+      bindings:
+        coc_io_task_created_input:
+          binder: rabbit
+          destination: cocIoTaskCreated
+          group: default
+        coc_league_Loaded_output:
+          binder: rabbit
+          destination: leagueLoaded
+          producer:
+            required-groups: default
+        coc_player_detailed_info_loaded_output:
+          binder: rabbit
+          destination: playerDetailedInfoLoaded
+          producer:
+            required-groups: default,tracker
+        coc_clan_detailed_info_loaded_output:
+          binder: rabbit
+          destination: clanDetailedInfoLoaded
+          producer:
+            required-groups: default,tracker
+        coc_war_log_loaded_output:
+          binder: rabbit
+          destination: warLogLoaded
+          producer:
+            required-groups: default
+        coc_war_log_rejected_output:
+          binder: rabbit
+          destination: warLogRejected
+          producer:
+            required-groups: default
+        coc_player_achievement_loaded_output:
+          binder: rabbit
+          destination: playerAchievementLoaded
+          producer:
+            required-groups: default
+        coc_player_hero_loaded_output:
+          binder: rabbit
+          destination: playerHeroLoaded
+          producer:
+            required-groups: default
+        coc_player_legend_statistic_loaded_output:
+          binder: rabbit
+          destination: playerLegendStatisticLoaded
+          producer:
+            required-groups: default
+        coc_player_spell_loaded_output:
+          binder: rabbit
+          destination: playerSpellLoaded
+          producer:
+            required-groups: default
+        coc_player_troop_loaded_output:
+          binder: rabbit
+          destination: playerTroopLoaded
+          producer:
+            required-groups: default
+        coc_state_notification_output:
+          binder: rabbit
+          destination: cocServerStateNotification
+      rabbit:
+        bindings:
+          coc_io_task_created_input:
+            consumer:
+              acknowledgeMode: AUTO
+              durableSubscription: true
+              prefetch: 1
+              requeueRejected: true
+              autoBindDlq: true
+              republishToDlq: true
+          coc_state_notification_output:
+            producer:
+              deliveryMode: NON_PERSISTENT
+              exchangeType: fanout
+              autoBindDlq: false
+---
+spring:
+  profiles: dev
+
+---
+spring:
+  profiles: test
+
+---
+spring:
+  profiles: fast-discovery
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+
+
+
