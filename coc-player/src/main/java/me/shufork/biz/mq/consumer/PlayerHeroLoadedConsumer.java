@@ -5,7 +5,6 @@ import me.shufork.biz.service.PlayerHeroService;
 import me.shufork.common.mq.consumer.MessageConsumer;
 import me.shufork.common.mq.payload.player.PlayerHeroLoadedPayload;
 import me.shufork.common.mq.sink.PlayerHeroLoadedSink;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class PlayerHeroLoadedConsumer implements MessageConsumer<PlayerHeroLoadedPayload> {
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private PlayerHeroService playerHeroService;

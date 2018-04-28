@@ -28,10 +28,10 @@ public class CocServerStateReporter {
     private final static long REPORT_INTERVAL_MIN = 1000 * 30L;
     private final AtomicReference<CocStateEnums> lastState = new AtomicReference<>(CocStateEnums.UNKNOWN);
     private final AtomicReference<CocStateEnums> prevState = new AtomicReference<>(CocStateEnums.UNKNOWN);
-    private final AtomicLong lastReport = new AtomicLong(DateTimeUtil.CurrentTimestamp());
+    private final AtomicLong lastReport = new AtomicLong(DateTimeUtil.currentTimestamp());
 
     public void reportState(CocStateEnums state,String message){
-        final long now = DateTimeUtil.CurrentTimestamp();
+        final long now = DateTimeUtil.currentTimestamp();
         if(!lastState.get().equals(state) || (now - lastReport.get() > REPORT_INTERVAL_MIN)){
             prevState.set(lastState.get());
             lastState.set(state);
@@ -41,7 +41,7 @@ public class CocServerStateReporter {
     }
     private void publish(String message){
         CocStateNotificationPayload payload = new CocStateNotificationPayload();
-        payload.setTime(DateTimeUtil.CurrentTimestamp());
+        payload.setTime(DateTimeUtil.currentTimestamp());
         payload.setPrevState(prevState.get());
         payload.setState(lastState.get());
         payload.setMessage(message);

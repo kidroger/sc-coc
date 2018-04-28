@@ -1,6 +1,9 @@
 package me.shufork.biz.utils;
 
-import me.shufork.biz.domain.*;
+import me.shufork.biz.domain.CocHero;
+import me.shufork.biz.domain.CocPlayerAchievement;
+import me.shufork.biz.domain.CocSpell;
+import me.shufork.biz.domain.CocTroop;
 import me.shufork.common.dto.supercell.coc.TroopDto;
 import me.shufork.common.enums.CocArmyTypeEnums;
 import me.shufork.common.vo.PlayerAchievementsVo;

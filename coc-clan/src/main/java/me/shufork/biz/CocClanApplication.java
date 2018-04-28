@@ -1,6 +1,8 @@
 package me.shufork.biz;
 
-import me.shufork.common.mq.sink.*;
+import me.shufork.common.mq.sink.ClanDetailedInfoLoadedSink;
+import me.shufork.common.mq.sink.WarLogLoadedSink;
+import me.shufork.common.mq.sink.WarLogRejectedSink;
 import me.shufork.common.mq.source.ClanFoundSource;
 import me.shufork.common.mq.source.CocIoTaskCreatedSource;
 import me.shufork.common.mq.source.PlayerFoundSource;

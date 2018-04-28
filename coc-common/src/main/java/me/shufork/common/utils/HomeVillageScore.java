@@ -25,41 +25,37 @@ public abstract class HomeVillageScore {
     public static final int totalScore(ClanDetailedInfoDto source){
         return basicScore(source) + pushScore(source) + warScore(source);
     }
-    private static int levelScore(int val){
-        val = Math.max(0,val);
-        return val * 500 * ((val/5)+1);
-    }
-    private static int warWinStreakScore(int val){
-        return WinStreakScore.calc(val);
+    private static int levelScore(final int val){
+        int level = Math.max(0,val);
+        return level * 500 * ((level/5)+1);
     }
 
     static class WinStreakScore{
         private static int rankScore(int rank,int rankScore,int rankStep){
             return rank * rankScore * ((rank/rankStep)+1);
         }
-        public static int calc(int winStreak){
-
+        public static int calc(final int winStreak){
             int score = 0;
-            winStreak = Math.max(0,winStreak);
+            int streak = Math.max(0,winStreak);
 
             // 0 ~ 50
-            if(winStreak <= 0 ) return score;
-            score += rankScore(  Math.min(winStreak,50),48,5);
+            if(streak <= 0 ) return score;
+            score += rankScore(  Math.min(streak,50),48,5);
 
             // 51 ~ 100 extra
-            winStreak-= 50;
-            if(winStreak <= 0 ) return score;
-            score += rankScore(Math.min(winStreak,100),16,5);
+            streak-= 50;
+            if(streak <= 0 ) return score;
+            score += rankScore(Math.min(streak,100),16,5);
 
             // 101 ~ 300 extra
-            winStreak-= 100;
-            if(winStreak <= 0 ) return score;
-            score += rankScore(Math.min(winStreak,300),3,2);
+            streak-= 100;
+            if(streak <= 0 ) return score;
+            score += rankScore(Math.min(streak,300),3,2);
 
             // 301 ~  max  extra
-            winStreak-= 300;
-            if(winStreak <= 0 ) return score;
-            score += rankScore(winStreak,5,1);
+            streak-= 300;
+            if(streak <= 0 ) return score;
+            score += rankScore(streak,5,1);
 
             return score;
         }

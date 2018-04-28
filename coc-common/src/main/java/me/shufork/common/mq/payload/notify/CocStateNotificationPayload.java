@@ -5,8 +5,8 @@ import me.shufork.common.enums.CocStateEnums;
 
 @Data
 public class CocStateNotificationPayload {
-    long time;
-    CocStateEnums prevState;
-    CocStateEnums state;
-    String message;
+    private long time;
+    private CocStateEnums prevState;
+    private CocStateEnums state;
+    private String message;
 }

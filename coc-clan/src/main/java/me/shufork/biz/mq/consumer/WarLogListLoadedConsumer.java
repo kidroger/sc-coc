@@ -2,11 +2,9 @@ package me.shufork.biz.mq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.mq.publisher.ClanFoundPublisher;
-import me.shufork.biz.mq.publisher.PlayerFoundPublisher;
 import me.shufork.biz.service.ClanService;
 import me.shufork.biz.service.WarLogService;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
-import me.shufork.common.dto.supercell.coc.PlayerBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.WarLogEntryDto;
 import me.shufork.common.mq.consumer.MessageConsumer;
 import me.shufork.common.mq.payload.warlog.WarLogListPayload;
@@ -16,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 

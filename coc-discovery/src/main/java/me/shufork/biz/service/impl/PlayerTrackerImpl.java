@@ -8,7 +8,6 @@ import me.shufork.common.dto.supercell.coc.PlayerBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.PlayerDetailedInfoDto;
 import me.shufork.common.util.DateTimeUtil;
 import me.shufork.common.utils.PlayerScore;
-import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

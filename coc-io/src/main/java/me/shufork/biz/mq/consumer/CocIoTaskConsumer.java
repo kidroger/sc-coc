@@ -1,5 +1,6 @@
 package me.shufork.biz.mq.consumer;
 
+import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.service.ClanDetailService;
 import me.shufork.biz.service.LeagueService;
 import me.shufork.biz.service.PlayerDetailService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
 
     @Autowired
@@ -31,7 +33,7 @@ public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
     public void handleMessage(CocIoTaskPayload message) {
 
         final CocIoTaskEnums goal = message.getGoal();
-        switch (goal){
+        switch (goal) {
 
             case LEAGUES:
                 leagueService.loadLeagues();
@@ -45,6 +47,8 @@ public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
             case WAR_LOGS:
                 warLogService.loadWarLogs(message.getResourceId(), Optional.ofNullable(message.getPaging()));
                 break;
+            default:
+                log.warn("unknown IO task type:{}", goal.toString());
         }
     }
 }

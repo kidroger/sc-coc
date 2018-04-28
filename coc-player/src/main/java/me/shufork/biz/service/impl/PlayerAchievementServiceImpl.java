@@ -24,7 +24,7 @@ public class PlayerAchievementServiceImpl implements PlayerAchievementService {
     @Autowired
     private CocPlayerAchievementRepository cocPlayerAchievementRepository;
 
-    private CocPlayerAchievement createCocAchievement_(PlayerAchievementsVo source){
+    protected CocPlayerAchievement createCocAchievement(PlayerAchievementsVo source){
         CocPlayerAchievement achievement = modelMapper.map(source,CocPlayerAchievement.class);
         achievement.setOwner(source.getOwner());
         //achievement.setVersion(0l);
@@ -32,7 +32,7 @@ public class PlayerAchievementServiceImpl implements PlayerAchievementService {
         return cocPlayerAchievementRepository.save(achievement);
     }
 
-    private List<CocPlayerAchievement> createCocAchievements_(Iterable<? extends PlayerAchievementsVo> source){
+    protected List<CocPlayerAchievement> createCocAchievements(Iterable<? extends PlayerAchievementsVo> source){
         List<CocPlayerAchievement> achievements = new LinkedList<>();
         source.forEach(o->{
             CocPlayerAchievement achievement = modelMapper.map(o,CocPlayerAchievement.class);
@@ -44,28 +44,28 @@ public class PlayerAchievementServiceImpl implements PlayerAchievementService {
         return cocPlayerAchievementRepository.save(achievements);
     }
 
-    private CocPlayerAchievement createOrGetCocAchievement_(PlayerAchievementsVo source){
+    protected CocPlayerAchievement createOrGetCocAchievement(PlayerAchievementsVo source){
         String pk = EntityKeyUtils.keyOf(source);
         CocPlayerAchievement achievement = cocPlayerAchievementRepository.findOne(pk);
         if(achievement == null){
-            return createCocAchievement_(source);
+            return createCocAchievement(source);
         }
         return achievement;
     }
 
-    private List<CocPlayerAchievement> createOrGetCocAchievements(Iterable<? extends PlayerAchievementsVo> source){
+    protected List<CocPlayerAchievement> createOrGetCocAchievements(Iterable<? extends PlayerAchievementsVo> source){
         List<CocPlayerAchievement> achievements = new LinkedList<>();
         source.forEach(o->{
-            achievements.add(createOrGetCocAchievement_(o));
+            achievements.add(createOrGetCocAchievement(o));
         });
         return achievements;
     }
 
-    private CocPlayerAchievement createOrUpdateCocAchievement_(PlayerAchievementsVo source){
+    protected CocPlayerAchievement createOrUpdateCocAchievement(PlayerAchievementsVo source){
         String pk = EntityKeyUtils.keyOf(source);
         CocPlayerAchievement achievement = cocPlayerAchievementRepository.findOne(pk);
         if(achievement == null){
-            return createCocAchievement_(source);
+            return createCocAchievement(source);
         }
         achievement.setCompletionInfo(source.getCompletionInfo());
         // do not update owner ,village and name
@@ -75,10 +75,10 @@ public class PlayerAchievementServiceImpl implements PlayerAchievementService {
 
         return cocPlayerAchievementRepository.save(achievement);
     }
-    private List<CocPlayerAchievement> createOrUpdateCocAchievements_(Iterable<? extends PlayerAchievementsVo> source){
+    protected List<CocPlayerAchievement> createOrUpdateCocAchievements(Iterable<? extends PlayerAchievementsVo> source){
         List<CocPlayerAchievement> achievements = new LinkedList<>();
         source.forEach(o->{
-            achievements.add(createOrUpdateCocAchievement_(o));
+            achievements.add(createOrUpdateCocAchievement(o));
         });
         return achievements;
     }
@@ -86,21 +86,21 @@ public class PlayerAchievementServiceImpl implements PlayerAchievementService {
 
     @Override
     public CocPlayerAchievement create(PlayerAchievementsVo source) {
-        return createCocAchievement_(source);
+        return createCocAchievement(source);
     }
 
     @Override
     public List<CocPlayerAchievement> create(Iterable<? extends PlayerAchievementsVo> source) {
-        return createCocAchievements_(source);
+        return createCocAchievements(source);
     }
 
     @Override
     public CocPlayerAchievement createOrUpdate(PlayerAchievementsVo source) {
-        return createOrUpdateCocAchievement_(source);
+        return createOrUpdateCocAchievement(source);
     }
 
     @Override
     public List<CocPlayerAchievement> createOrUpdate(Iterable<? extends PlayerAchievementsVo> source) {
-        return createOrUpdateCocAchievements_(source);
+        return createOrUpdateCocAchievements(source);
     }
 }

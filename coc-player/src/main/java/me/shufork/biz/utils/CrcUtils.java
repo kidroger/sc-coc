@@ -17,7 +17,7 @@ public final class CrcUtils {
     private static final ThreadLocal<StringBuffer> STRING_BUFFER = ThreadLocal.withInitial(() -> new StringBuffer(1024));
     private CrcUtils(){}
 
-    public static long StringCrc(StringBuffer stringBuffer,ByteBuffer byteBuffer,List<String> strings){
+    public static long stringCrc(StringBuffer stringBuffer, ByteBuffer byteBuffer, List<String> strings){
         strings.forEach(o -> stringBuffer.append(StringUtils.trimToEmpty(o)));
 
         CharBuffer inputBuffer = CharBuffer.wrap(stringBuffer.toString());
@@ -33,11 +33,11 @@ public final class CrcUtils {
 
         return crc32.getValue();
     }
-    /*public static long CrcOf(CocClanBadgeUrls cocClanBadgeUrls){
+    /*public static long crcOf(CocClanBadgeUrls cocClanBadgeUrls){
         final ByteBuffer byteBuffer = BYTE_BUFFER.get();
         final StringBuffer stringBuffer = STRING_BUFFER.get();
         try{
-            return StringCrc(stringBuffer,byteBuffer,Arrays.asList(
+            return stringCrc(stringBuffer,byteBuffer,Arrays.asList(
                     cocClanBadgeUrls.getTiny(),
                     cocClanBadgeUrls.getSmall(),
                     cocClanBadgeUrls.getMedium(),
@@ -48,11 +48,11 @@ public final class CrcUtils {
         }
     }*/
 
-    public static long CrcOf(LeagueIconUrlsDto leagueIconUrlsDto){
+    public static long crcOf(LeagueIconUrlsDto leagueIconUrlsDto){
         final ByteBuffer byteBuffer = BYTE_BUFFER.get();
         final StringBuffer stringBuffer = STRING_BUFFER.get();
         try{
-            return StringCrc(stringBuffer,byteBuffer,Arrays.asList(
+            return stringCrc(stringBuffer,byteBuffer,Arrays.asList(
                     leagueIconUrlsDto.getTiny(),
                     leagueIconUrlsDto.getSmall(),
                     leagueIconUrlsDto.getMedium(),

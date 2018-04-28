@@ -1,7 +1,10 @@
 package me.shufork.biz.service.impl;
 
 import com.ibasco.agql.protocols.supercell.coc.webapi.interfaces.CocPlayers;
+import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocAchievements;
+import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocLegendStatistics;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocPlayerDetailedInfo;
+import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocTroop;
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.service.PlayerDetailService;
 import me.shufork.common.dto.supercell.coc.AchievementsDto;
@@ -31,23 +34,23 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    PlayerTroopLoadedSource playerTroopLoadedSource;
+    private PlayerTroopLoadedSource playerTroopLoadedSource;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    PlayerSpellLoadedSource playerSpellLoadedSource;
+    private PlayerSpellLoadedSource playerSpellLoadedSource;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    PlayerHeroLoadedSource playerHeroLoadedSource;
+    private PlayerHeroLoadedSource playerHeroLoadedSource;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    PlayerLegendStatisticLoadedSource playerLegendStatisticLoadedSource;
+    private PlayerLegendStatisticLoadedSource playerLegendStatisticLoadedSource;
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    PlayerAchievementLoadedSource playerAchievementLoadedSource;
+    private PlayerAchievementLoadedSource playerAchievementLoadedSource;
 
 
     @Autowired
@@ -74,49 +77,56 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
         playerDetailedInfoPayload.setPlayerDetailedInfo(modelMapper.map(data,PlayerDetailedInfoDto.class) );
         playerDetailedInfoLoadedSource.output().send(MessageBuilder.withPayload(playerDetailedInfoPayload).build());
 
-        if(data.getLegendStatistics()!=null){
+        publishPlayerAchievements(data.getTag(),data.getAchievements());
+        publishPlayerLegendStatistics(data.getTag(),data.getLegendStatistics());
+        publishPlayerHeroes(data.getTag(),data.getHeroes());
+        publishPlayerSpells(data.getTag(),data.getSpells());
+        publishPlayerTroops(data.getTag(),data.getTroops());
 
-            PlayerLegendStatisticLoadedPayload playerLegendStatisticLoadedPayload = new PlayerLegendStatisticLoadedPayload();
-            playerLegendStatisticLoadedPayload.setPlayerTag(data.getTag());
-            playerLegendStatisticLoadedPayload.setLegendStatistics(modelMapper.map(data.getLegendStatistics(),LegendStatisticsDto.class));
-            playerLegendStatisticLoadedSource.output().send(MessageBuilder.withPayload(playerLegendStatisticLoadedPayload).build());
-        }
-
-        if(data.getAchievements()!=null && !data.getAchievements().isEmpty()){
-
+    }
+    void publishPlayerAchievements(String owner, List<CocAchievements> achievements){
+        if(achievements!=null && !achievements.isEmpty()){
             PlayerAchievementLoadedPayload playerAchievementLoadedPayload = new PlayerAchievementLoadedPayload();
-            playerAchievementLoadedPayload.setPlayerTag(data.getTag());
-            List<AchievementsDto> mappedData = data.getAchievements().stream().map(o->modelMapper.map(o,AchievementsDto.class)).collect(Collectors.toList());
+            playerAchievementLoadedPayload.setPlayerTag(owner);
+            List<AchievementsDto> mappedData = achievements.stream().map(o->modelMapper.map(o,AchievementsDto.class)).collect(Collectors.toList());
             playerAchievementLoadedPayload.setAchievements(mappedData);
             playerAchievementLoadedSource.output().send(MessageBuilder.withPayload(playerAchievementLoadedPayload).build());
         }
+    }
+    void publishPlayerLegendStatistics(String owner, CocLegendStatistics legendStatistics){
+        if(legendStatistics!=null){
+            PlayerLegendStatisticLoadedPayload playerLegendStatisticLoadedPayload = new PlayerLegendStatisticLoadedPayload();
+            playerLegendStatisticLoadedPayload.setPlayerTag(owner);
+            playerLegendStatisticLoadedPayload.setLegendStatistics(modelMapper.map(legendStatistics,LegendStatisticsDto.class));
+            playerLegendStatisticLoadedSource.output().send(MessageBuilder.withPayload(playerLegendStatisticLoadedPayload).build());
+        }
+    }
 
-        if(data.getHeroes()!=null && !data.getHeroes().isEmpty()){
-
+    void publishPlayerHeroes(String owner, List<CocTroop> heroes){
+        if(heroes!=null && !heroes.isEmpty()){
             PlayerHeroLoadedPayload playerHeroLoadedPayload = new PlayerHeroLoadedPayload();
-            playerHeroLoadedPayload.setPlayerTag(data.getTag());
-            List<TroopDto> mappedData = data.getHeroes().stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
+            playerHeroLoadedPayload.setPlayerTag(owner);
+            List<TroopDto> mappedData = heroes.stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
             playerHeroLoadedPayload.setHeroes(mappedData);
             playerHeroLoadedSource.output().send(MessageBuilder.withPayload(playerHeroLoadedPayload).build());
         }
-
-        if(data.getSpells()!=null && !data.getSpells().isEmpty()){
-
+    }
+    void publishPlayerSpells(String owner, List<CocTroop> spells){
+        if(spells!=null && !spells.isEmpty()){
             PlayerSpellLoadedPayload playerSpellLoadedPayload = new PlayerSpellLoadedPayload();
-            playerSpellLoadedPayload.setPlayerTag(data.getTag());
-            List<TroopDto> mappedData = data.getSpells().stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
+            playerSpellLoadedPayload.setPlayerTag(owner);
+            List<TroopDto> mappedData = spells.stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
             playerSpellLoadedPayload.setSpells(mappedData);
             playerSpellLoadedSource.output().send(MessageBuilder.withPayload(playerSpellLoadedPayload).build());
         }
-
-        if(data.getTroops()!=null && !data.getTroops().isEmpty()){
-
+    }
+    void publishPlayerTroops(String owner, List<CocTroop> troops){
+        if(troops!=null && !troops.isEmpty()){
             PlayerTroopLoadedPayload playerTroopLoadedPayload = new PlayerTroopLoadedPayload();
-            playerTroopLoadedPayload.setPlayerTag(data.getTag());
-            List<TroopDto> mappedData = data.getTroops().stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
+            playerTroopLoadedPayload.setPlayerTag(owner);
+            List<TroopDto> mappedData = troops.stream().map(o->modelMapper.map(o,TroopDto.class)).collect(Collectors.toList());
             playerTroopLoadedPayload.setTroops(mappedData);
             playerTroopLoadedSource.output().send(MessageBuilder.withPayload(playerTroopLoadedPayload).build());
         }
-
     }
 }

@@ -1,7 +1,6 @@
 package me.shufork.common.vo;
 
 import lombok.Data;
-import lombok.NonNull;
 
 /**
  * @deprecated

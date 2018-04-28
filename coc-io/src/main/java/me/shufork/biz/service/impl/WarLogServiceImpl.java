@@ -12,7 +12,6 @@ import me.shufork.common.mq.payload.warlog.WarLogListPayload;
 import me.shufork.common.mq.payload.warlog.WarLogRejectedPayload;
 import me.shufork.common.mq.source.WarLogLoadedSource;
 import me.shufork.common.mq.source.WarLogRejectedSource;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;

@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class CocDiscoveryAutoConfiguration {
 
     @Bean("clanFetchErrorDetector")
-    FetchErrorDetector fetchErrorDetector(){
+    public FetchErrorDetector fetchErrorDetector(){
         return new FetchErrorDetector();
     }
 
@@ -80,7 +80,7 @@ public class CocDiscoveryAutoConfiguration {
         private final Logger log = LoggerFactory.getLogger(ClanFetcher.class);
         private final AtomicBoolean started = new AtomicBoolean(false);
         private final Timer  clanFetchTimer = new Timer(true);
-        private final AtomicLong lastIoServiceAck = new AtomicLong(DateTimeUtil.CurrentTimestamp());
+        private final AtomicLong lastIoServiceAck = new AtomicLong(DateTimeUtil.currentTimestamp());
         @Autowired
         private  CocDiscoveryProperties cocDiscoveryProperties;
         @Autowired
@@ -96,7 +96,7 @@ public class CocDiscoveryAutoConfiguration {
 
         @StreamListener(CocStateNotificationSink.INPUT)
         public void handleMessage(CocStateNotificationPayload message) {
-            lastIoServiceAck.set(DateTimeUtil.CurrentTimestamp());
+            lastIoServiceAck.set(DateTimeUtil.currentTimestamp());
             final CocStateEnums prevState = message.getPrevState();
             final CocStateEnums currentState = message.getState();
             log.info("coc io service state:{} -> {}",prevState,currentState );
@@ -121,7 +121,7 @@ public class CocDiscoveryAutoConfiguration {
         }
 
         private void pullClan(){
-            if(skipFetch.get() || (DateTimeUtil.CurrentTimestamp() - lastIoServiceAck.get() > IO_SERVICE_TTL) ){
+            if(skipFetch.get() || (DateTimeUtil.currentTimestamp() - lastIoServiceAck.get() > IO_SERVICE_TTL) ){
                 log.warn("pause clan fetch, reason :coc io service not ready");
                 return;
             }

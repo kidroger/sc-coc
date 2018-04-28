@@ -1,5 +1,4 @@
 package me.shufork.biz.config;
-import java.util.Date;
 
 import me.shufork.biz.domain.ClanTracking;
 import me.shufork.biz.domain.PlayerTracking;
@@ -9,8 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Optional;
 
 @Configuration
 public class ModelMapperConfiguration {

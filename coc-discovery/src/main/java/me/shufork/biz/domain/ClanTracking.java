@@ -1,10 +1,8 @@
 package me.shufork.biz.domain;
 
 import lombok.Data;
-import me.shufork.common.enums.CocTagEnums;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;

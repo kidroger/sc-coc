@@ -2,7 +2,8 @@ package me.shufork.biz.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.domain.CocPlayer;
-import me.shufork.biz.repository.*;
+import me.shufork.biz.repository.CocLeagueRepository;
+import me.shufork.biz.repository.CocPlayerRepository;
 import me.shufork.biz.service.PlayerService;
 import me.shufork.common.constants.CocConstants;
 import me.shufork.common.dto.supercell.coc.PlayerBasicInfoDto;
@@ -12,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Transactional
 @Service

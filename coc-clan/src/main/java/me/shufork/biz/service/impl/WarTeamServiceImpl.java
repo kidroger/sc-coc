@@ -8,7 +8,6 @@ import me.shufork.biz.utils.EntityKeyUtils;
 import me.shufork.biz.vo.WarLogEntryClanVo;
 import me.shufork.biz.vo.WarTeamVo;
 import me.shufork.common.exceptions.RecordNotFoundException;
-import org.apache.commons.lang3.tuple.Pair;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

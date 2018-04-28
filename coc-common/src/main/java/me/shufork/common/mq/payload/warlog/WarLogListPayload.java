@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.page.PageMeta;
 import lombok.Data;
 import me.shufork.common.dto.supercell.coc.WarLogEntryDto;
-import me.shufork.common.mq.payload.Page;
 
 import java.util.List;
 

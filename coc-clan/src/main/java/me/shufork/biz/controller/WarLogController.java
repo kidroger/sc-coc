@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.service.WarLogService;
 import me.shufork.biz.vo.WarLogEntryVo;
-import me.shufork.biz.vo.WarTeamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

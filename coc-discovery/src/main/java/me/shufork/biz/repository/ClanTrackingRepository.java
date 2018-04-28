@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
-import java.util.List;
 
 public interface ClanTrackingRepository extends JpaRepository<ClanTracking,String > {
 

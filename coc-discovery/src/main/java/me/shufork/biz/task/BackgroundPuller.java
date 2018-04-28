@@ -1,15 +1,6 @@
 package me.shufork.biz.task;
 
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.domain.ClanTracking;
-import me.shufork.biz.service.ClanTracker;
-import me.shufork.common.enums.CocIoTaskEnums;
-import me.shufork.common.mq.payload.task.CocIoTaskPayload;
-import me.shufork.common.mq.source.CocIoTaskCreatedSource;
-import me.shufork.common.utils.CocHashTagUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component

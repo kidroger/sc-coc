@@ -4,10 +4,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
-import me.shufork.common.dto.supercell.coc.ClanDetailedInfoDto;
 import me.shufork.common.dto.supercell.coc.LeagueDto;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

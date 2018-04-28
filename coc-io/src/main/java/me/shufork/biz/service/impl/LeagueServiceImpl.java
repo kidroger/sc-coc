@@ -7,7 +7,6 @@ import me.shufork.biz.service.LeagueService;
 import me.shufork.common.dto.supercell.coc.LeagueDto;
 import me.shufork.common.mq.payload.league.LeagueListPayload;
 import me.shufork.common.mq.source.LeagueLoadedSource;
-import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;

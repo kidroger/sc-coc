@@ -1,7 +1,6 @@
 package me.shufork.biz.mq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.ClanTracker;
 import me.shufork.biz.service.PlayerTracker;
 import me.shufork.common.dto.supercell.coc.PlayerBasicInfoDto;
 import me.shufork.common.mq.consumer.MessageConsumer;
