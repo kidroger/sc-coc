@@ -34,7 +34,6 @@ public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
 
         final CocIoTaskEnums goal = message.getGoal();
         switch (goal) {
-
             case LEAGUES:
                 leagueService.loadLeagues();
                 break;

@@ -84,7 +84,7 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
         publishPlayerTroops(data.getTag(),data.getTroops());
 
     }
-    void publishPlayerAchievements(String owner, List<CocAchievements> achievements){
+    public void publishPlayerAchievements(String owner, List<CocAchievements> achievements){
         if(achievements!=null && !achievements.isEmpty()){
             PlayerAchievementLoadedPayload playerAchievementLoadedPayload = new PlayerAchievementLoadedPayload();
             playerAchievementLoadedPayload.setPlayerTag(owner);
@@ -93,7 +93,7 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
             playerAchievementLoadedSource.output().send(MessageBuilder.withPayload(playerAchievementLoadedPayload).build());
         }
     }
-    void publishPlayerLegendStatistics(String owner, CocLegendStatistics legendStatistics){
+    public void publishPlayerLegendStatistics(String owner, CocLegendStatistics legendStatistics){
         if(legendStatistics!=null){
             PlayerLegendStatisticLoadedPayload playerLegendStatisticLoadedPayload = new PlayerLegendStatisticLoadedPayload();
             playerLegendStatisticLoadedPayload.setPlayerTag(owner);
@@ -102,7 +102,7 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
         }
     }
 
-    void publishPlayerHeroes(String owner, List<CocTroop> heroes){
+    public void publishPlayerHeroes(String owner, List<CocTroop> heroes){
         if(heroes!=null && !heroes.isEmpty()){
             PlayerHeroLoadedPayload playerHeroLoadedPayload = new PlayerHeroLoadedPayload();
             playerHeroLoadedPayload.setPlayerTag(owner);
@@ -111,7 +111,7 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
             playerHeroLoadedSource.output().send(MessageBuilder.withPayload(playerHeroLoadedPayload).build());
         }
     }
-    void publishPlayerSpells(String owner, List<CocTroop> spells){
+    public void publishPlayerSpells(String owner, List<CocTroop> spells){
         if(spells!=null && !spells.isEmpty()){
             PlayerSpellLoadedPayload playerSpellLoadedPayload = new PlayerSpellLoadedPayload();
             playerSpellLoadedPayload.setPlayerTag(owner);
@@ -120,7 +120,7 @@ public class PlayerDetailServiceImpl implements PlayerDetailService {
             playerSpellLoadedSource.output().send(MessageBuilder.withPayload(playerSpellLoadedPayload).build());
         }
     }
-    void publishPlayerTroops(String owner, List<CocTroop> troops){
+    public void publishPlayerTroops(String owner, List<CocTroop> troops){
         if(troops!=null && !troops.isEmpty()){
             PlayerTroopLoadedPayload playerTroopLoadedPayload = new PlayerTroopLoadedPayload();
             playerTroopLoadedPayload.setPlayerTag(owner);

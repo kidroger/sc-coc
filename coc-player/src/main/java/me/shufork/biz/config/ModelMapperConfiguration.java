@@ -1,18 +1,14 @@
 package me.shufork.biz.config;
+
 import me.shufork.biz.converter.*;
 import me.shufork.biz.domain.*;
-import me.shufork.biz.utils.EntityKeyUtils;
-import me.shufork.common.constants.CocConstants;
 import me.shufork.common.dto.supercell.coc.*;
-import me.shufork.common.utils.CocHashTagUtil;
 import me.shufork.common.vo.PlayerAchievementsVo;
 import me.shufork.common.vo.PlayerLegendStatisticsVo;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Optional;
 
 @Configuration
 public class ModelMapperConfiguration {
