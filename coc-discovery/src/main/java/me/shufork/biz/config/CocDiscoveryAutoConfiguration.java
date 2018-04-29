@@ -73,7 +73,6 @@ public class CocDiscoveryAutoConfiguration {
     }
 
     @Component
-    @ConditionalOnProperty(prefix = "shufork.sc.coc.discovery", name = "enabled", matchIfMissing = true)
     static class ClanFetcher implements ApplicationListener<ApplicationReadyEvent>{
 
         private final static long IO_SERVICE_TTL = 1000L*60;
@@ -99,7 +98,7 @@ public class CocDiscoveryAutoConfiguration {
             lastIoServiceAck.set(DateTimeUtil.currentTimestamp());
             final CocStateEnums prevState = message.getPrevState();
             final CocStateEnums currentState = message.getState();
-            log.info("coc io service state:{} -> {}",prevState,currentState );
+            log.debug("coc io service state:{} -> {}",prevState,currentState );
             if(currentState.equals(CocStateEnums.ONLINE)){
                 skipFetch.set(false);
             }else{
@@ -108,7 +107,10 @@ public class CocDiscoveryAutoConfiguration {
         }
         @Override
         public void onApplicationEvent(ApplicationReadyEvent event) {
-
+            if(!cocDiscoveryProperties.isEnabled()){
+                log.warn("discovery disabled");
+                return;
+            }
             if(!started.get()){
                 started.set(true);
                 clanFetchTimer.schedule(new TimerTask() {
