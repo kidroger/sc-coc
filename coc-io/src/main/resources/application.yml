@@ -29,6 +29,7 @@ logging:
     #com.ibasco.agql: INFO
     #org.asynchttpclient: DEBUG
     org.springframework.amqp.rabbit: INFO
+    #me.shufork.biz.mq.consumer: TRACE
 
 info:
   version: '@project.version@'

@@ -31,8 +31,8 @@ public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
     @Override
     @StreamListener(CocIoTaskCreatedSink.INPUT)
     public void handleMessage(CocIoTaskPayload message) {
-
         final CocIoTaskEnums goal = message.getGoal();
+        log.trace("handling coc io task,goal : {},target {}",goal.toString(),message.getResourceId());
         switch (goal) {
             case LEAGUES:
                 leagueService.loadLeagues();

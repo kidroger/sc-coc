@@ -21,7 +21,7 @@ public class PlayerFoundConsumer implements MessageConsumer<PlayerFoundPayload> 
     @Override
     public void handleMessage(PlayerFoundPayload message) {
         final PlayerBasicInfoDto player = message.getPlayer();
-        log.debug("handling for player found,tag = {},name = {}",player.getTag(),player.getName());
+        log.trace("handling for player found,tag = {},name = {}",player.getTag(),player.getName());
         playerTracker.addPlayer(player);
     }
 }

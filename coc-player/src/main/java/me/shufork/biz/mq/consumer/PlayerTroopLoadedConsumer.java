@@ -19,7 +19,7 @@ public class PlayerTroopLoadedConsumer  implements MessageConsumer<PlayerTroopLo
     @Override
     public void handleMessage(PlayerTroopLoadedPayload message) {
         final String owner = message.getPlayerTag();
-        log.debug("handling troops for player({})",owner);
+        log.trace("handling troops for player({})",owner);
         if(message.getTroops()!=null && !message.getTroops().isEmpty() ){
             playerTroopService.relinkPlayerTroops(owner,message.getTroops());
         }

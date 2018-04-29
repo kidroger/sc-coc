@@ -24,7 +24,7 @@ public class PlayerLegendStatisticLoadedConsumer implements MessageConsumer<Play
     @Override
     public void handleMessage(PlayerLegendStatisticLoadedPayload message) {
         final String owner = message.getPlayerTag();
-        log.debug("handling legend statistics for player({})",owner);
+        log.trace("handling legend statistics for player({})",owner);
         if(message.getLegendStatistics()!=null){
             PlayerLegendStatisticsVo vo = modelMapper.map(message.getLegendStatistics(),PlayerLegendStatisticsVo.class);
             vo.setOwner(owner);

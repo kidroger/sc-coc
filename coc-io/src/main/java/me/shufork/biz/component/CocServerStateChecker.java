@@ -39,7 +39,7 @@ public class CocServerStateChecker {
         @Override
         public void run() {
             leaguesApi.getLeagueList(1).thenAccept(o->{
-                log.trace("coc server state checked:{}",CocStateEnums.ONLINE.toString());
+                log.debug("coc server state checked:{}",CocStateEnums.ONLINE.toString());
                 nextCheck.set(BASE_CHECK_INTERVAL*6);
                 cocServerStateReporter.reportState(CocStateEnums.ONLINE,"via league list");
             }).exceptionally(e->{

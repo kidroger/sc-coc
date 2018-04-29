@@ -20,7 +20,7 @@ public class PlayerSpellLoadedConsumer implements MessageConsumer<PlayerSpellLoa
     @Override
     public void handleMessage(PlayerSpellLoadedPayload message) {
         final String owner = message.getPlayerTag();
-        log.debug("handling spells for player({})",owner);
+        log.trace("handling spells for player({})",owner);
         if(message.getSpells()!=null && !message.getSpells().isEmpty() ){
             playerSpellService.relinkPlayerSpells(owner,message.getSpells());
         }

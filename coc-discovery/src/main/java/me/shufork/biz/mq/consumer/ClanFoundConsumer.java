@@ -21,7 +21,7 @@ public class ClanFoundConsumer implements MessageConsumer<ClanFoundPayload> {
     @Override
     public void handleMessage(ClanFoundPayload message) {
         final ClanBasicInfoDto clan = message.getClan();
-        log.debug("handling for clan found,tag = {},name = {}",clan.getTag(),clan.getName());
+        log.trace("handling for clan found,tag = {},name = {}",clan.getTag(),clan.getName());
         clanTracker.addClan(clan);
     }
 }

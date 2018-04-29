@@ -26,17 +26,20 @@ logging:
     #org.springframework.cache: DEBUG
     #org.asynchttpclient: DEBUG
     org.springframework.amqp.rabbit: INFO
-    me.shufork.biz.mq.consumer: INFO
+    me.shufork.biz:
+      config: TRACE
+    #  mq.consumer: TRACE
 
 info:
   version: '@project.version@'
 
 shufork.sc.coc.discovery:
   enabled: false
+  enableMetrics: true
   clan-fetch:
     size: 2
-    error-detect : 10
-    rate: 15000 # in milliseconds
+    error-detect : 1
+    rate: 10000 # in milliseconds
     init-delay: 30000  # in milliseconds
 
 liquibase:

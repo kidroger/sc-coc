@@ -27,7 +27,7 @@ public class PlayerAchievementLoadedConsumer  implements MessageConsumer<PlayerA
     @Override
     public void handleMessage(PlayerAchievementLoadedPayload message) {
         final String owner = message.getPlayerTag();
-        log.debug("handling achievements for player({})",owner);
+        log.trace("handling achievements for player({})",owner);
         if(message.getAchievements()!=null && !message.getAchievements().isEmpty() ){
             List<PlayerAchievementsVo> voList = message.getAchievements().stream().map(o ->{
                 PlayerAchievementsVo vo = modelMapper.map(o,PlayerAchievementsVo.class);

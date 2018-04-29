@@ -20,7 +20,7 @@ public class PlayerHeroLoadedConsumer implements MessageConsumer<PlayerHeroLoade
     @Override
     public void handleMessage(PlayerHeroLoadedPayload message) {
         final String owner = message.getPlayerTag();
-        log.debug("handling heroes for player({})",owner);
+        log.trace("handling heroes for player({})",owner);
         if(message.getHeroes()!=null && !message.getHeroes().isEmpty() ){
             playerHeroService.relinkPlayerHeroes(owner,message.getHeroes());
         }
