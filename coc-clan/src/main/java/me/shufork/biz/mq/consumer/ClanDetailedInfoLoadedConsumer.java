@@ -1,10 +1,12 @@
 package me.shufork.biz.mq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
+import me.shufork.biz.components.HotClans;
 import me.shufork.biz.mq.publisher.PlayerFoundPublisher;
 import me.shufork.biz.service.ClanDetailsService;
 import me.shufork.biz.service.ClanService;
 import me.shufork.biz.service.WarLogPuller;
+import me.shufork.biz.vo.ClanInfoVo;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.ClanDetailedInfoDto;
 import me.shufork.common.mq.consumer.MessageConsumer;
@@ -14,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Slf4j
@@ -29,6 +33,8 @@ public class ClanDetailedInfoLoadedConsumer implements MessageConsumer<ClanDetai
     private WarLogPuller warLogPuller;
     @Autowired
     private PlayerFoundPublisher playerFoundPublisher;
+    @Autowired
+    private HotClans hotClans;
 
     @StreamListener(ClanDetailedInfoLoadedSink.INPUT)
     @Override
@@ -38,7 +44,11 @@ public class ClanDetailedInfoLoadedConsumer implements MessageConsumer<ClanDetai
 
         clanService.createOrUpdate( modelMapper.map(clan,ClanBasicInfoDto.class));
         clanDetailsService.createOrUpdate(clan);
-        warLogPuller.checkAndPullWarLog(clan);
-        playerFoundPublisher.publishPlayerFound(clan.getClanMembers());
+
+        CompletableFuture.runAsync(()-> {
+            warLogPuller.checkAndPullWarLog(clan);
+            playerFoundPublisher.publishPlayerFound(clan.getClanMembers());
+            hotClans.add(modelMapper.map(clan, ClanInfoVo.class));
+        });
     }
 }

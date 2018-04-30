@@ -1,13 +1,11 @@
 package me.shufork.biz.config;
 
-import me.shufork.biz.converter.ClanBasicInfoDtoConverter;
-import me.shufork.biz.converter.ClanDetailedInfoDtoConverter;
-import me.shufork.biz.converter.WarLogEntryClanVoConverter;
-import me.shufork.biz.converter.WarLogEntryVoConverter;
+import me.shufork.biz.converter.*;
 import me.shufork.biz.domain.CocClan;
 import me.shufork.biz.domain.CocClanDetails;
 import me.shufork.biz.domain.CocWarLog;
 import me.shufork.biz.domain.CocWarTeam;
+import me.shufork.biz.vo.ClanInfoVo;
 import me.shufork.biz.vo.WarLogEntryClanVo;
 import me.shufork.biz.vo.WarLogEntryVo;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
@@ -47,6 +45,11 @@ public class ModelMapperConfiguration {
         modelMapper.createTypeMap(CocClanDetails.class,ClanDetailedInfoDto.class)
                 .setConverter(new ClanDetailedInfoDtoConverter.FromCocClanDetails());
 
+        modelMapper.createTypeMap(CocClanDetails.class,ClanInfoVo.class)
+                .setConverter(new ClanInfoVoConverter.FromCocClanDetails());
+
+        modelMapper.createTypeMap(ClanDetailedInfoDto.class,ClanInfoVo.class)
+                .setConverter(new ClanInfoVoConverter.FromClanDetailedInfoDto());
 
         return modelMapper;
     }
