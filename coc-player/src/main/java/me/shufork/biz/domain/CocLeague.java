@@ -1,6 +1,8 @@
 package me.shufork.biz.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -14,6 +16,7 @@ import java.util.Date;
 @DynamicUpdate
 public class CocLeague {
 
+    @Setter(AccessLevel.PRIVATE)
     @Version
     @Column(name = "z_version")
     private Long version;

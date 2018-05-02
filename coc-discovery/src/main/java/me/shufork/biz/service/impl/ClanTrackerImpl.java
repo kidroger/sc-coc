@@ -14,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.OptimisticLockException;
+import java.util.Date;
+import java.util.List;
+
 @Transactional
 @Component
 @Slf4j
@@ -48,21 +52,47 @@ public class ClanTrackerImpl implements ClanTracker {
         entity.setName(clan.getName());
         return clanTrackingRepository.save(entity);
     }
-
-    @Override
-    public ClanTracking.ClanTracker retrieveOneForAutoPull() {
-        ClanTracking.ClanTracker found = clanTrackingRepository.findFirstByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class);
-        if(found != null){
-            clanTrackingRepository.updateLastHit(found.getClan(),DateTimeUtil.utc().toDate());
-        }
-        return found;
-        /*
+    /*
+    public ClanTracking retrieveOneForAutoPull(){
         ClanTracking found = clanTrackingRepository.findFirstByOrderByLastHitAscScoreDesc();
         if(found != null){
             found.setLastHit(DateTimeUtil.utc().toDate());
             clanTrackingRepository.save(found);
         }
         return found;
-        */
+    }
+    */
+
+    private ClanTracking.ClanTracker updateLastHitAndGet(){
+        ClanTracking.ClanTracker found = clanTrackingRepository.findFirstByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class);
+        if(found != null ){
+            if(1 != clanTrackingRepository.updateLastHit(found.getClan(),found.getVersion(), DateTimeUtil.utc().toDate())){
+                throw new OptimisticLockException(found.getClan()+"("+ found.getVersion()+")",null, found);
+            }
+        }
+        return found;
+    }
+
+    @Override
+    public ClanTracking.ClanTracker retrieveOneForAutoPull() {
+
+        final int maxRetry = 10;
+        int tried = 0;
+        while (tried++ < maxRetry){
+            try {
+                return updateLastHitAndGet();
+            }catch (OptimisticLockException e){
+                log.debug("OptimisticLockException :{}.retry {}/{}",e.getMessage(),tried,maxRetry);
+            }
+        }
+        // still no luck
+        return null;
+    }
+    @Override
+    public List<ClanTracking.ClanTracker> retrieveSomeForAutoPull(int count) {
+        final Date lastHit = DateTimeUtil.utc().toDate();
+        clanTrackingRepository.markLastHit(lastHit,count);
+        // possibly empty list
+        return clanTrackingRepository.findAllByLastHit(lastHit,ClanTracking.ClanTracker.class);
     }
 }

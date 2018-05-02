@@ -26,10 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -128,11 +125,11 @@ public class CocDiscoveryAutoConfiguration {
                 return;
             }
             int size = Math.max(1,cocDiscoveryProperties.getClanFetch().getSize());
-            while (size-- >0){
+            while (size-- > 0){
                 fetchOne();
             }
+            //fetchSome(size);
         }
-
         private void fetchOne(){
             ClanTracking.ClanTracker seed = clanTracker.retrieveOneForAutoPull();
             if(seed != null){
@@ -144,5 +141,29 @@ public class CocDiscoveryAutoConfiguration {
                 fetchErrorDetector.requested();
             }
         }
+        /*private void fetchSome(int size){
+            List<ClanTracking.ClanTracker> seeds = null;
+            final int maxRetry = 3;
+            int retry = 0;
+            while (retry++ < maxRetry ){
+                seeds = clanTracker.retrieveSomeForAutoPull(size);
+                if(seeds != null && !seeds.isEmpty()){
+                    break;
+                }else{
+                    log.warn("no clan to fetch,retry = {} / {}",retry,maxRetry);
+                }
+            }
+
+            Optional.ofNullable(seeds).ifPresent( o->{
+                o.forEach(seed->{
+                    log.debug("fetch clan info,tag = {},name = {}",seed.getClan(),seed.getName());
+                    CocIoTaskPayload payload = new CocIoTaskPayload();
+                    payload.setGoal(CocIoTaskEnums.CLAN_DETAIL);
+                    payload.setResourceId(CocHashTagUtil.ensurePrefix(seed.getClan()));
+                    cocIoTaskCreatedSource.output().send(MessageBuilder.withPayload(payload).build());
+                    fetchErrorDetector.requested();
+                });
+            } );
+        }*/
     }
 }

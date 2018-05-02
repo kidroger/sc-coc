@@ -1,6 +1,8 @@
 package me.shufork.biz.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -13,6 +15,7 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 public class ClanTracking {
+    @Setter(AccessLevel.PRIVATE)
     @Version
     @Column(name = "z_version")
     private Long version;
@@ -42,5 +45,6 @@ public class ClanTracking {
     public interface ClanTracker{
         String getClan();
         String getName();
+        Long getVersion();
     }
 }
