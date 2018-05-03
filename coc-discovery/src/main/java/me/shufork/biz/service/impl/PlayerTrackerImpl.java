@@ -28,12 +28,11 @@ public class PlayerTrackerImpl implements PlayerTracker {
         PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
         if(entity == null){
             entity = modelMapper.map(player,PlayerTracking.class);
-            //entity.setVersion(0l);
+            entity.setScore(PlayerScore.totalScore(player));
+            return playerTrackingRepository.save(entity);
         }
-        entity.setScore(PlayerScore.totalScore(player));
-        entity.setName(player.getName());
-
-        return playerTrackingRepository.save(entity);
+        // no update even if name changed
+        return entity;
     }
 
     @Override
@@ -42,7 +41,6 @@ public class PlayerTrackerImpl implements PlayerTracker {
         PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
         if(entity == null){
             entity = new PlayerTracking();
-            //entity.setVersion(0l);
             entity.setPlayer(player.getTag());
         }
         entity.setScore(PlayerScore.totalScore(player));

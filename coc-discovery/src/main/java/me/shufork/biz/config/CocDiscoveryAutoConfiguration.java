@@ -138,7 +138,7 @@ public class CocDiscoveryAutoConfiguration {
 
             List<ClanTracking.ClanTracker> seeds = clanTracker.retrieveSomeForAutoPull(fetchRatePerSec * 60 );
             fetchList.addAll(seeds);
-            log.debug("update clan fetch list,size = ",fetchList.size());
+            log.debug("update clan fetch list,size = {}",fetchList.size());
             return seeds.size();
         }
         private void fetchSome(int size){
