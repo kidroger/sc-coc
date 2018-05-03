@@ -34,10 +34,9 @@ logging:
 info:
   version: '@project.version@'
 
-super-cell:
-  coc:
-     # see https://developer.clashofclans.com/#/
-    api-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjU0NGEwN2UzLTlhZWEtNGQzMS1iZWQ0LTI5NTZiNmM4YmVjOSIsImlhdCI6MTUyMzcwNjAwMSwic3ViIjoiZGV2ZWxvcGVyL2ZjODFlOGZmLTZiNTEtNzM1My1kMzRlLWU4NTU1YmUxYzM0NyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE4Mi4xMzguMTgxLjI0NSJdLCJ0eXBlIjoiY2xpZW50In1dfQ.zXYYS2kup5uZVEtGm5cFfvcUFBqGuk7x-zl6SUuEFOtB3M1XF4xqRsd9owLIkgMZpxcBMc5OqmnUkyCh3FnlzA
+# TODO get it : https://developer.clashofclans.com/#/
+#super-cell.coc.api-token:
+
 
 spring:
   cloud:

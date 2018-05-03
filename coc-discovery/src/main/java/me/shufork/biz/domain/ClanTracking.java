@@ -45,6 +45,5 @@ public class ClanTracking {
     public interface ClanTracker{
         String getClan();
         String getName();
-        Long getVersion();
     }
 }

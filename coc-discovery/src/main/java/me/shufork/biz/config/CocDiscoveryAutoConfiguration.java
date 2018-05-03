@@ -2,6 +2,7 @@ package me.shufork.biz.config;
 
 import me.shufork.biz.domain.ClanTracking;
 import me.shufork.biz.service.ClanTracker;
+import me.shufork.biz.utils.TrackerCache;
 import me.shufork.common.enums.CocIoTaskEnums;
 import me.shufork.common.enums.CocStateEnums;
 import me.shufork.common.mq.payload.notify.CocStateNotificationPayload;
@@ -39,6 +40,11 @@ public class CocDiscoveryAutoConfiguration {
         return new FetchErrorDetector();
     }
 
+    @Bean("clanTrackerCache")
+    @ConditionalOnProperty(prefix = "shufork.sc.coc.discovery", name = "enabled")
+    public TrackerCache<ClanTracking.ClanTracker> clanTrackerCache(){
+        return new TrackerCache<>(256);
+    }
 
     public static class FetchErrorDetector{
         private final AtomicLong request = new AtomicLong(0L);
@@ -53,7 +59,7 @@ public class CocDiscoveryAutoConfiguration {
     }
 
     @Component
-    @ConditionalOnProperty(prefix = "shufork.sc.coc.discovery", name = "enableMetrics", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "shufork.sc.coc.discovery", name = "enableMetrics")
     public static class FetchMetric implements PublicMetrics {
         @Autowired
         @Qualifier("clanFetchErrorDetector")
@@ -77,7 +83,12 @@ public class CocDiscoveryAutoConfiguration {
         private final AtomicBoolean started = new AtomicBoolean(false);
         private final Timer  clanFetchTimer = new Timer(true);
         private final AtomicLong lastIoServiceAck = new AtomicLong(DateTimeUtil.currentTimestamp());
-        private final List<ClanTracking.ClanTracker> fetchList = new LinkedList<>();
+        //private final List<ClanTracking.ClanTracker> fetchList = new LinkedList<>();
+
+        @Autowired(required = false)
+        @Qualifier("clanTrackerCache")
+        private TrackerCache<ClanTracking.ClanTracker> clanTrackerCache;
+
         @Autowired
         private  CocDiscoveryProperties cocDiscoveryProperties;
         @Autowired
@@ -126,26 +137,25 @@ public class CocDiscoveryAutoConfiguration {
                 return;
             }
             int size = Math.max(1,cocDiscoveryProperties.getClanFetch().getSize());
-            ensureFetchCache();
+            loadListFromDB();
             fetchSome(size);
         }
-        private int ensureFetchCache(){
+        private int loadListFromDB(){
             final int fetchSize = cocDiscoveryProperties.getClanFetch().getSize();
             final int fetchRatePerSec = fetchSize / Math.max(1,(int)cocDiscoveryProperties.getClanFetch().getRate()/1000) ;
-            if(fetchList.size() >= fetchSize){
+            if(clanTrackerCache.size() >= fetchSize){
                 return 0;
             }
 
             List<ClanTracking.ClanTracker> seeds = clanTracker.retrieveSomeForAutoPull(fetchRatePerSec * 60 );
-            fetchList.addAll(seeds);
-            log.debug("update clan fetch list,size = {}",fetchList.size());
+            seeds.forEach(o->clanTrackerCache.add(o.getClan(),o));
+
+            log.debug("preload clan fetch list,size = {}",clanTrackerCache.size());
             return seeds.size();
         }
         private void fetchSome(int size){
-            List<ClanTracking.ClanTracker> seeds = new LinkedList<>();
-            for(int i=0;i<size && !fetchList.isEmpty() ;++i){
-                seeds.add(fetchList.remove(0));
-            }
+            List<ClanTracking.ClanTracker> seeds = clanTrackerCache.retrieveSome(size);
+
             if(seeds.isEmpty()){
                 log.warn("no clan to fetch");
             }
