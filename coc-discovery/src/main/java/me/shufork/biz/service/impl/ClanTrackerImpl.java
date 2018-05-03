@@ -11,10 +11,13 @@ import me.shufork.common.utils.BuilderVillageScore;
 import me.shufork.common.utils.HomeVillageScore;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +35,6 @@ public class ClanTrackerImpl implements ClanTracker {
         ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
         if(entity == null){
             entity = modelMapper.map(clan,ClanTracking.class);
-            //entity.setVersion(0l);
             entity.setScore(HomeVillageScore.basicScore(clan));
             return clanTrackingRepository.save(entity);
         }
@@ -44,7 +46,6 @@ public class ClanTrackerImpl implements ClanTracker {
         ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
         if(entity == null){
             entity = new ClanTracking();
-            //entity.setVersion(0l);
             entity.setClan(clan.getTag());
         }
         entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
@@ -52,47 +53,15 @@ public class ClanTrackerImpl implements ClanTracker {
         entity.setName(clan.getName());
         return clanTrackingRepository.save(entity);
     }
-    /*
-    public ClanTracking retrieveOneForAutoPull(){
-        ClanTracking found = clanTrackingRepository.findFirstByOrderByLastHitAscScoreDesc();
-        if(found != null){
-            found.setLastHit(DateTimeUtil.utc().toDate());
-            clanTrackingRepository.save(found);
-        }
-        return found;
-    }
-    */
 
-    private ClanTracking.ClanTracker updateLastHitAndGet(){
-        ClanTracking.ClanTracker found = clanTrackingRepository.findFirstByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class);
-        if(found != null ){
-            if(1 != clanTrackingRepository.updateLastHit(found.getClan(),found.getVersion(), DateTimeUtil.utc().toDate())){
-                throw new OptimisticLockException(found.getClan()+"("+ found.getVersion()+")",null, found);
-            }
-        }
-        return found;
-    }
-
-    @Override
-    public ClanTracking.ClanTracker retrieveOneForAutoPull() {
-
-        final int maxRetry = 10;
-        int tried = 0;
-        while (tried++ < maxRetry){
-            try {
-                return updateLastHitAndGet();
-            }catch (OptimisticLockException e){
-                log.debug("OptimisticLockException :{}.retry {}/{}",e.getMessage(),tried,maxRetry);
-            }
-        }
-        // still no luck
-        return null;
-    }
+    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
     @Override
     public List<ClanTracking.ClanTracker> retrieveSomeForAutoPull(int count) {
         final Date lastHit = DateTimeUtil.utc().toDate();
-        clanTrackingRepository.markLastHit(lastHit,count);
-        // possibly empty list
-        return clanTrackingRepository.findAllByLastHit(lastHit,ClanTracking.ClanTracker.class);
+        Page<ClanTracking.ClanTracker> pageResult = clanTrackingRepository.findAllByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class,new PageRequest(0,count));
+        List<ClanTracking.ClanTracker> trackers = pageResult.getContent();
+        trackers.forEach(o->clanTrackingRepository.updateLastHit(o.getClan(),lastHit));
+        return trackers;
     }
+
 }

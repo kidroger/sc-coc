@@ -23,6 +23,8 @@ server:
 
 logging:
   level:
+    #org.hibernate.SQL: DEBUG
+    #org.hibernate.type: TRACE
     #org.springframework.cache: DEBUG
     #org.asynchttpclient: DEBUG
     org.springframework.amqp.rabbit: INFO

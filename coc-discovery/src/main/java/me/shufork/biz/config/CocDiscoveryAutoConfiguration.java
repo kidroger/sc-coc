@@ -77,6 +77,7 @@ public class CocDiscoveryAutoConfiguration {
         private final AtomicBoolean started = new AtomicBoolean(false);
         private final Timer  clanFetchTimer = new Timer(true);
         private final AtomicLong lastIoServiceAck = new AtomicLong(DateTimeUtil.currentTimestamp());
+        private final List<ClanTracking.ClanTracker> fetchList = new LinkedList<>();
         @Autowired
         private  CocDiscoveryProperties cocDiscoveryProperties;
         @Autowired
@@ -125,35 +126,29 @@ public class CocDiscoveryAutoConfiguration {
                 return;
             }
             int size = Math.max(1,cocDiscoveryProperties.getClanFetch().getSize());
-            while (size-- > 0){
-                fetchOne();
-            }
-            //fetchSome(size);
+            ensureFetchCache();
+            fetchSome(size);
         }
-        private void fetchOne(){
-            ClanTracking.ClanTracker seed = clanTracker.retrieveOneForAutoPull();
-            if(seed != null){
-                log.debug("fetch clan info,tag = {},name = {}",seed.getClan(),seed.getName());
-                CocIoTaskPayload payload = new CocIoTaskPayload();
-                payload.setGoal(CocIoTaskEnums.CLAN_DETAIL);
-                payload.setResourceId(CocHashTagUtil.ensurePrefix(seed.getClan()));
-                cocIoTaskCreatedSource.output().send(MessageBuilder.withPayload(payload).build());
-                fetchErrorDetector.requested();
-            }
-        }
-        /*private void fetchSome(int size){
-            List<ClanTracking.ClanTracker> seeds = null;
-            final int maxRetry = 3;
-            int retry = 0;
-            while (retry++ < maxRetry ){
-                seeds = clanTracker.retrieveSomeForAutoPull(size);
-                if(seeds != null && !seeds.isEmpty()){
-                    break;
-                }else{
-                    log.warn("no clan to fetch,retry = {} / {}",retry,maxRetry);
-                }
+        private int ensureFetchCache(){
+            final int fetchSize = cocDiscoveryProperties.getClanFetch().getSize();
+            final int fetchRatePerSec = fetchSize / Math.max(1,(int)cocDiscoveryProperties.getClanFetch().getRate()/1000) ;
+            if(fetchList.size() >= fetchSize){
+                return 0;
             }
 
+            List<ClanTracking.ClanTracker> seeds = clanTracker.retrieveSomeForAutoPull(fetchRatePerSec * 60 );
+            fetchList.addAll(seeds);
+            log.debug("update clan fetch list,size = ",fetchList.size());
+            return seeds.size();
+        }
+        private void fetchSome(int size){
+            List<ClanTracking.ClanTracker> seeds = new LinkedList<>();
+            for(int i=0;i<size && !fetchList.isEmpty() ;++i){
+                seeds.add(fetchList.remove(0));
+            }
+            if(seeds.isEmpty()){
+                log.warn("no clan to fetch");
+            }
             Optional.ofNullable(seeds).ifPresent( o->{
                 o.forEach(seed->{
                     log.debug("fetch clan info,tag = {},name = {}",seed.getClan(),seed.getName());
@@ -164,6 +159,6 @@ public class CocDiscoveryAutoConfiguration {
                     fetchErrorDetector.requested();
                 });
             } );
-        }*/
+        }
     }
 }

@@ -8,5 +8,6 @@
 
     <!-- note : include order is important -->
     <include file="classpath:db/changelog/changelog-1.sql"/>
+    <include file="classpath:db/changelog/changelog-2.sql"/>
 
 </databaseChangeLog>

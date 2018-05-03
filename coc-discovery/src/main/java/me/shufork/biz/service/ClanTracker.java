@@ -19,7 +19,7 @@ public interface ClanTracker {
      * his method may return null
      * @return
      */
-    ClanTracking.ClanTracker retrieveOneForAutoPull();
+    //ClanTracking.ClanTracker retrieveOneForAutoPull();
 
     /**
      * This method may return empty list(taken away by another thread/application )
