@@ -1,6 +1,6 @@
 package me.shufork.biz.service;
 
-public interface ClanDetailService {
+public interface ClanDetailPublisher {
 
     /**
      * load clan info
