@@ -6,7 +6,7 @@ import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocLegendStatistics;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocPlayerDetailedInfo;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocTroop;
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.PlayerDetailPublisher;
+import me.shufork.biz.service.PlayerDetailIoService;
 import me.shufork.common.dto.supercell.coc.AchievementsDto;
 import me.shufork.common.dto.supercell.coc.LegendStatisticsDto;
 import me.shufork.common.dto.supercell.coc.PlayerDetailedInfoDto;
@@ -26,7 +26,7 @@ import static me.shufork.common.utils.CocHashTagUtil.ensurePrefix;
 
 @Service
 @Slf4j
-public class PlayerDetailPublisherImpl implements PlayerDetailPublisher {
+public class PlayerDetailIoServiceImpl implements PlayerDetailIoService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired

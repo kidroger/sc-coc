@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -33,11 +32,11 @@ public class WarTeamServiceImpl implements WarTeamService {
     @Autowired
     private CocWarTeamRepository cocWarTeamRepository;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
     @Override
     public CocWarTeam create(WarLogEntryClanVo source) {
         CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
-        entity.setId(EntityKeyUtils.keyOf(entity));
+        final String pk= EntityKeyUtils.keyOf(entity);
+        entity.setId(pk);
         return cocWarTeamRepository.save(entity);
     }
 
@@ -45,23 +44,29 @@ public class WarTeamServiceImpl implements WarTeamService {
     public List<CocWarTeam> create(Iterable<? extends WarLogEntryClanVo> source) {
         List<CocWarTeam> warTeams = new LinkedList<>();
         source.forEach(o->{
-            CocWarTeam entity = modelMapper.map(o,CocWarTeam.class);
-            entity.setId(EntityKeyUtils.keyOf(entity));
-            warTeams.add( entity );
+            CocWarTeam warTeam = create(o);
+            if(warTeam!=null){
+                warTeams.add(warTeam);
+            }
         });
-        return cocWarTeamRepository.save(warTeams);
+        return warTeams;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public String createOrUpdate(WarLogEntryClanVo source) {
-
-        final String pk = EntityKeyUtils.keyOf(source);
-        if(cocWarTeamRepository.exists(pk)){
-            return create(source).getId();
+        CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
+        final String pk= EntityKeyUtils.keyOf(entity);
+        entity.setId(pk);
+        cocWarTeamRepository.insertOrUpdate(entity);
+        return pk;
+        /*final String pk = EntityKeyUtils.keyOf(source);
+        if(!cocWarTeamRepository.exists(pk)){
+            create(source);
+            return pk;
         }
         cocWarTeamRepository.updatePrivateInfo(pk,source.getAttacks(),source.getExpEarned());
-        return pk;
+        return pk;*/
     }
 
     @Override

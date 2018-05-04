@@ -5,7 +5,7 @@ import com.ibasco.agql.protocols.supercell.coc.webapi.interfaces.CocClans;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocWarLogEntry;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.page.PageResult;
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.WarLogPublisher;
+import me.shufork.biz.service.WarLogIoService;
 import me.shufork.common.dto.supercell.coc.WarLogEntryDto;
 import me.shufork.common.mq.payload.Page;
 import me.shufork.common.mq.payload.warlog.WarLogListPayload;
@@ -26,7 +26,7 @@ import static me.shufork.common.utils.CocHashTagUtil.ensurePrefix;
 
 @Service
 @Slf4j
-public class WarLogPublisherImpl implements WarLogPublisher {
+public class WarLogIoServiceImpl implements WarLogIoService {
 
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

@@ -34,7 +34,7 @@ public class WarLogServiceImpl implements WarLogService {
     @Autowired
     private CocWarLogRepository cocWarLogRepository;
 
-    private CocWarLog addWarLogIfMiss(WarLogEntryDto warLog){
+    private String addWarLogIfMiss(WarLogEntryDto warLog){
         final WarLogEntryClanVo clan = modelMapper.map(warLog.getClan(),WarLogEntryClanVo.class);
         clan.setWarTime(CocDateTimeUtil.parse(warLog.getEndTime()).toDate());
         clan.setOpponent(warLog.getOpponent().getTag());
@@ -43,19 +43,18 @@ public class WarLogServiceImpl implements WarLogService {
         opponent.setWarTime(CocDateTimeUtil.parse(warLog.getEndTime()).toDate());
         opponent.setOpponent(warLog.getClan().getTag());
 
-        final String pk = EntityKeyUtils.keyOfWarLog(clan.getTag(),warLog.getEndTime());
-
-        CocWarLog entity = cocWarLogRepository.findOne(pk);
-        if(entity != null){
-            return entity;
-        }
-
         final String homeTeamId = warTeamService.createOrUpdate(clan);
         final String awayTeamId = warTeamService.createOrUpdate(opponent);
+
+        final String pk = EntityKeyUtils.keyOfWarLog(clan.getTag(),warLog.getEndTime());
+
+        if(cocWarLogRepository.exists(pk)){
+            return pk;
+        }
         if(homeTeamId == null || awayTeamId == null){
             throw new IllegalStateException("Failed to create war team");
         }
-        entity = new CocWarLog();
+        CocWarLog entity = new CocWarLog();
         entity.setId(pk);
         entity.setHomeTeam(homeTeamId);
         entity.setAwayTeam(awayTeamId);
@@ -63,11 +62,13 @@ public class WarLogServiceImpl implements WarLogService {
         entity.setEndTime(CocDateTimeUtil.parse(warLog.getEndTime()).toDate() );
         entity.setTeamSize(warLog.getTeamSize());
         entity.setOwner(clan.getTag());
-        return cocWarLogRepository.save(entity);
+
+        cocWarLogRepository.insertOrUpdate(entity);
+        return pk;
     }
 
-    private List<CocWarLog> addWarLogIfMiss(Iterable<WarLogEntryDto> warLogs){
-        List<CocWarLog> cocWarLogs = new LinkedList<>();
+    private List<String> addWarLogIfMiss(Iterable<WarLogEntryDto> warLogs){
+        List<String> cocWarLogs = new LinkedList<>();
         warLogs.forEach(o->{
             cocWarLogs.add(addWarLogIfMiss(o));
         });

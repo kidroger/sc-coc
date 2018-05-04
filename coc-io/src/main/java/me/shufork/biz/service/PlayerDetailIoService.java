@@ -1,6 +1,6 @@
 package me.shufork.biz.service;
 
-public interface PlayerDetailService {
+public interface PlayerDetailIoService {
 
     /**
      * load player info

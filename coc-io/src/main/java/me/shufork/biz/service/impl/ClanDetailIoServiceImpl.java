@@ -3,7 +3,7 @@ package me.shufork.biz.service.impl;
 import com.ibasco.agql.protocols.supercell.coc.webapi.interfaces.CocClans;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocClanDetailedInfo;
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.ClanDetailPublisher;
+import me.shufork.biz.service.ClanDetailIoService;
 import me.shufork.common.dto.supercell.coc.ClanDetailedInfoDto;
 import me.shufork.common.mq.payload.clan.ClanDetailedInfoPayload;
 import me.shufork.common.mq.source.ClanDetailedInfoLoadedSource;
@@ -18,7 +18,7 @@ import static me.shufork.common.utils.CocHashTagUtil.ensurePrefix;
 
 @Service
 @Slf4j
-public class ClanDetailPublisherImpl implements ClanDetailPublisher {
+public class ClanDetailIoServiceImpl implements ClanDetailIoService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired

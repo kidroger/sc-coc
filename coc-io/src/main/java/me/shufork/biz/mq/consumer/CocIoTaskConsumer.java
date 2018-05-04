@@ -1,10 +1,10 @@
 package me.shufork.biz.mq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.ClanDetailService;
-import me.shufork.biz.service.LeagueService;
-import me.shufork.biz.service.PlayerDetailService;
-import me.shufork.biz.service.WarLogService;
+import me.shufork.biz.service.ClanDetailIoService;
+import me.shufork.biz.service.LeagueIoService;
+import me.shufork.biz.service.PlayerDetailIoService;
+import me.shufork.biz.service.WarLogIoService;
 import me.shufork.common.enums.CocIoTaskEnums;
 import me.shufork.common.mq.consumer.MessageConsumer;
 import me.shufork.common.mq.payload.task.CocIoTaskPayload;
@@ -20,13 +20,13 @@ import java.util.Optional;
 public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
 
     @Autowired
-    private PlayerDetailService playerDetailService;
+    private PlayerDetailIoService playerDetailIoService;
     @Autowired
-    private LeagueService leagueService;
+    private LeagueIoService leagueIoService;
     @Autowired
-    private ClanDetailService clanDetailService;
+    private ClanDetailIoService clanDetailIoService;
     @Autowired
-    private WarLogService warLogService;
+    private WarLogIoService warLogIoService;
 
     @Override
     @StreamListener(CocIoTaskCreatedSink.INPUT)
@@ -35,16 +35,16 @@ public class CocIoTaskConsumer implements MessageConsumer<CocIoTaskPayload> {
         log.trace("handling coc io task,goal : {},target {}",goal.toString(),message.getResourceId());
         switch (goal) {
             case LEAGUES:
-                leagueService.loadLeagues();
+                leagueIoService.loadLeagues();
                 break;
             case PLAYER_DETAIL:
-                playerDetailService.loadPlayerDetailedInfo(message.getResourceId());
+                playerDetailIoService.loadPlayerDetailedInfo(message.getResourceId());
                 break;
             case CLAN_DETAIL:
-                clanDetailService.loadClanDetailedInfo(message.getResourceId());
+                clanDetailIoService.loadClanDetailedInfo(message.getResourceId());
                 break;
             case WAR_LOGS:
-                warLogService.loadWarLogs(message.getResourceId(), Optional.ofNullable(message.getPaging()));
+                warLogIoService.loadWarLogs(message.getResourceId(), Optional.ofNullable(message.getPaging()));
                 break;
             default:
                 log.warn("unknown IO task type:{}", goal.toString());

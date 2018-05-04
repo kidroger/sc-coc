@@ -1,6 +1,6 @@
 package me.shufork.biz.service;
 
-public interface LeagueService {
+public interface LeagueIoService {
 
     /**
      * load league list

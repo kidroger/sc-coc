@@ -4,7 +4,7 @@ import me.shufork.common.mq.payload.Page;
 
 import java.util.Optional;
 
-public interface WarLogService {
+public interface WarLogIoService {
 
     /**
      * load war logs

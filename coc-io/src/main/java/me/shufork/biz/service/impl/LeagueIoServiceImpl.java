@@ -3,7 +3,7 @@ package me.shufork.biz.service.impl;
 import com.ibasco.agql.protocols.supercell.coc.webapi.interfaces.CocLeagues;
 import com.ibasco.agql.protocols.supercell.coc.webapi.pojos.CocLeague;
 import lombok.extern.slf4j.Slf4j;
-import me.shufork.biz.service.LeaguePublisher;
+import me.shufork.biz.service.LeagueIoService;
 import me.shufork.common.dto.supercell.coc.LeagueDto;
 import me.shufork.common.mq.payload.league.LeagueListPayload;
 import me.shufork.common.mq.source.LeagueLoadedSource;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class LeaguePublisherImpl implements LeaguePublisher {
+public class LeagueIoServiceImpl implements LeagueIoService {
 
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
