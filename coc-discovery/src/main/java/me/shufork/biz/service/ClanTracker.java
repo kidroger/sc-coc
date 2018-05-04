@@ -10,10 +10,16 @@ public interface ClanTracker {
     /**
      *
      * @param clan
-     * @return
+     * @return the pk
      */
-    ClanTracking addClan(ClanBasicInfoDto clan);
-    ClanTracking addOrUpdateClan(ClanDetailedInfoDto clan);
+    String addClan(ClanBasicInfoDto clan);
+
+    /**
+     *
+     * @param clan
+     * @return  the pk
+     */
+    String addOrUpdateClan(ClanDetailedInfoDto clan);
 
     /**
      * his method may return null

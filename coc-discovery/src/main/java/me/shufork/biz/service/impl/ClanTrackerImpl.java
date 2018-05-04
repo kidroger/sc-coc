@@ -36,9 +36,9 @@ public class ClanTrackerImpl implements ClanTracker {
     private TrackerCache<ClanTracking.ClanTracker> clanTrackerCache;
 
     @Override
-    public ClanTracking addClan(ClanBasicInfoDto clan) {
+    public String addClan(ClanBasicInfoDto clan) {
 
-        ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
+        /*ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
         if(entity == null){
             entity = modelMapper.map(clan,ClanTracking.class);
             entity.setScore(HomeVillageScore.basicScore(clan));
@@ -47,12 +47,16 @@ public class ClanTrackerImpl implements ClanTracker {
             }
             return clanTrackingRepository.save(entity);
         }
-        return entity;
+        return entity;*/
+        ClanTracking entity = modelMapper.map(clan,ClanTracking.class);
+        entity.setScore(HomeVillageScore.basicScore(clan));
+        clanTrackingRepository.insertOrIgnore(entity);
+        return entity.getClan();
     }
 
     @Override
-    public ClanTracking addOrUpdateClan(ClanDetailedInfoDto clan) {
-        ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
+    public String addOrUpdateClan(ClanDetailedInfoDto clan) {
+        /*ClanTracking entity = clanTrackingRepository.findOne(clan.getTag());
         if(entity == null){
             entity = new ClanTracking();
             entity.setClan(clan.getTag());
@@ -60,7 +64,13 @@ public class ClanTrackerImpl implements ClanTracker {
         entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
         entity.setScore(HomeVillageScore.totalScore(clan) + BuilderVillageScore.totalScore(clan));
         entity.setName(clan.getName());
-        return clanTrackingRepository.save(entity);
+        return clanTrackingRepository.save(entity);*/
+        ClanTracking entity = new ClanTracking();
+        entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
+        entity.setScore(HomeVillageScore.totalScore(clan) + BuilderVillageScore.totalScore(clan));
+        entity.setName(clan.getName());
+        clanTrackingRepository.insertOrUpdate(entity);
+        return entity.getClan();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)

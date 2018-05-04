@@ -24,21 +24,24 @@ public class PlayerTrackerImpl implements PlayerTracker {
     private ModelMapper modelMapper;
 
     @Override
-    public PlayerTracking addPlayer(PlayerBasicInfoDto player) {
-        PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
+    public String addPlayer(PlayerBasicInfoDto player) {
+        /*PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
         if(entity == null){
             entity = modelMapper.map(player,PlayerTracking.class);
             entity.setScore(PlayerScore.totalScore(player));
             return playerTrackingRepository.save(entity);
         }
-        // no update even if name changed
-        return entity;
+        return entity;*/
+        PlayerTracking entity = modelMapper.map(player,PlayerTracking.class);
+        entity.setScore(PlayerScore.totalScore(player));
+        playerTrackingRepository.insertOrIgnore(entity);
+        return entity.getPlayer();
     }
 
     @Override
-    public PlayerTracking addOrUpdatePlayer(PlayerDetailedInfoDto player) {
+    public String addOrUpdatePlayer(PlayerDetailedInfoDto player) {
 
-        PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
+        /*PlayerTracking entity = playerTrackingRepository.findOne(player.getTag());
         if(entity == null){
             entity = new PlayerTracking();
             entity.setPlayer(player.getTag());
@@ -47,6 +50,13 @@ public class PlayerTrackerImpl implements PlayerTracker {
         entity.setName(player.getName());
         entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
 
-        return playerTrackingRepository.save(entity);
+        return playerTrackingRepository.save(entity);*/
+        PlayerTracking entity = new PlayerTracking();
+        entity.setPlayer(player.getTag());
+        entity.setScore(PlayerScore.totalScore(player));
+        entity.setName(player.getName());
+        entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
+        playerTrackingRepository.insertOrUpdate(entity);
+        return entity.getPlayer();
     }
 }

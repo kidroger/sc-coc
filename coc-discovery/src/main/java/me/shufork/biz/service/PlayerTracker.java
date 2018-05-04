@@ -6,6 +6,6 @@ import me.shufork.common.dto.supercell.coc.PlayerDetailedInfoDto;
 
 public interface PlayerTracker {
 
-    PlayerTracking addPlayer(PlayerBasicInfoDto player);
-    PlayerTracking addOrUpdatePlayer(PlayerDetailedInfoDto player);
+    String addPlayer(PlayerBasicInfoDto player);
+    String addOrUpdatePlayer(PlayerDetailedInfoDto player);
 }
