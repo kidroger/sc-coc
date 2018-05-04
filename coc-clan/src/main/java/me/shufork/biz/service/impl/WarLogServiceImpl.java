@@ -1,7 +1,7 @@
 package me.shufork.biz.service.impl;
+
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.domain.CocWarLog;
-import me.shufork.biz.domain.CocWarTeam;
 import me.shufork.biz.repository.CocWarLogRepository;
 import me.shufork.biz.service.WarLogService;
 import me.shufork.biz.service.WarTeamService;
@@ -50,15 +50,15 @@ public class WarLogServiceImpl implements WarLogService {
             return entity;
         }
 
-        final CocWarTeam homeTeam = warTeamService.createOrUpdate(clan);
-        final CocWarTeam awayTeam = warTeamService.createOrUpdate(opponent);
-        if(homeTeam == null || awayTeam == null){
-            throw new RuntimeException("Failed to create war team");
+        final String homeTeamId = warTeamService.createOrUpdate(clan);
+        final String awayTeamId = warTeamService.createOrUpdate(opponent);
+        if(homeTeamId == null || awayTeamId == null){
+            throw new IllegalStateException("Failed to create war team");
         }
         entity = new CocWarLog();
         entity.setId(pk);
-        entity.setHomeTeam(homeTeam.getId());
-        entity.setAwayTeam(awayTeam.getId());
+        entity.setHomeTeam(homeTeamId);
+        entity.setAwayTeam(awayTeamId);
         entity.setResult(warLog.getResult());
         entity.setEndTime(CocDateTimeUtil.parse(warLog.getEndTime()).toDate() );
         entity.setTeamSize(warLog.getTeamSize());

@@ -69,4 +69,11 @@ public class CocWarTeam {
 
     @Column(name = "f_exp_earned")
     private int expEarned;
+
+    /*public interface WarTeamUpdate{
+        int getAttacks();
+        void setAttacks(int v);
+        int getExpEarned();
+        void setExpEarned(int v);
+    }*/
 }

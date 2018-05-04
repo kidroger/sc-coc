@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.domain.ClanTracking;
 import me.shufork.biz.repository.ClanTrackingRepository;
 import me.shufork.biz.service.ClanTracker;
+import me.shufork.biz.utils.TrackerCache;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.ClanDetailedInfoDto;
 import me.shufork.common.util.DateTimeUtil;
@@ -11,6 +12,7 @@ import me.shufork.common.utils.BuilderVillageScore;
 import me.shufork.common.utils.HomeVillageScore;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,10 @@ public class ClanTrackerImpl implements ClanTracker {
     private ClanTrackingRepository clanTrackingRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired(required = false)
+    @Qualifier("clanTrackerCache")
+    private TrackerCache<ClanTracking.ClanTracker> clanTrackerCache;
+
     @Override
     public ClanTracking addClan(ClanBasicInfoDto clan) {
 
@@ -36,6 +42,9 @@ public class ClanTrackerImpl implements ClanTracker {
         if(entity == null){
             entity = modelMapper.map(clan,ClanTracking.class);
             entity.setScore(HomeVillageScore.basicScore(clan));
+            if(clanTrackerCache!=null){
+                clanTrackerCache.add(clan.getTag(),new TrackerCache.SimpleClanTracker(clan.getTag(),clan.getName()));
+            }
             return clanTrackingRepository.save(entity);
         }
         return entity;

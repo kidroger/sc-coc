@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -31,6 +33,7 @@ public class WarTeamServiceImpl implements WarTeamService {
     @Autowired
     private CocWarTeamRepository cocWarTeamRepository;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
     @Override
     public CocWarTeam create(WarLogEntryClanVo source) {
         CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
@@ -49,28 +52,25 @@ public class WarTeamServiceImpl implements WarTeamService {
         return cocWarTeamRepository.save(warTeams);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
     @Override
-    public CocWarTeam createOrUpdate(WarLogEntryClanVo source) {
+    public String createOrUpdate(WarLogEntryClanVo source) {
 
         final String pk = EntityKeyUtils.keyOf(source);
-        CocWarTeam entity = cocWarTeamRepository.findOne(pk);
-        if(null == entity){
-            entity = modelMapper.map(source,CocWarTeam.class);
-            entity.setId(EntityKeyUtils.keyOf(entity));
+        if(cocWarTeamRepository.exists(pk)){
+            return create(source).getId();
         }
-        entity.setAttacks(source.getAttacks());
-        entity.setExpEarned(source.getExpEarned());
-
-        return cocWarTeamRepository.save(entity);
+        cocWarTeamRepository.updatePrivateInfo(pk,source.getAttacks(),source.getExpEarned());
+        return pk;
     }
 
     @Override
-    public List<CocWarTeam> createOrUpdate(Iterable<? extends WarLogEntryClanVo> source) {
-        List<CocWarTeam> warTeams = new LinkedList<>();
+    public List<String> createOrUpdate(Iterable<? extends WarLogEntryClanVo> source) {
+        List<String> ids = new LinkedList<>();
         source.forEach(o->{
-            warTeams.add(createOrUpdate(o));
+            ids.add(createOrUpdate(o));
         });
-        return warTeams;
+        return ids;
     }
 
     @Override
