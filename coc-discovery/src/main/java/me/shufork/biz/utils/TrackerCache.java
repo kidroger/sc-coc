@@ -29,7 +29,7 @@ public class TrackerCache<T> {
         synchronized (trackers){
             int got = 0;
             Iterator<Map.Entry<String,T>> itr = trackers.entrySet().iterator();
-            while (itr.hasNext() && got < max){
+            while (itr.hasNext() && got++ < max){
                 result.add(itr.next().getValue());
             }
         }
