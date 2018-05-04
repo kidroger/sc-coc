@@ -66,6 +66,7 @@ public class ClanTrackerImpl implements ClanTracker {
         entity.setName(clan.getName());
         return clanTrackingRepository.save(entity);*/
         ClanTracking entity = new ClanTracking();
+        entity.setClan(clan.getTag());
         entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));
         entity.setScore(HomeVillageScore.totalScore(clan) + BuilderVillageScore.totalScore(clan));
         entity.setName(clan.getName());

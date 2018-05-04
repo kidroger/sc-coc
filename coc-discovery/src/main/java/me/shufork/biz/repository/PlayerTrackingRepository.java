@@ -1,6 +1,5 @@
 package me.shufork.biz.repository;
 
-import me.shufork.biz.domain.ClanTracking;
 import me.shufork.biz.domain.PlayerTracking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
