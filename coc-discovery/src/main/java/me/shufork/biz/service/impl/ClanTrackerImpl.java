@@ -48,10 +48,16 @@ public class ClanTrackerImpl implements ClanTracker {
             return clanTrackingRepository.save(entity);
         }
         return entity;*/
-        ClanTracking entity = modelMapper.map(clan,ClanTracking.class);
-        entity.setScore(HomeVillageScore.basicScore(clan));
-        clanTrackingRepository.insertOrIgnore(entity);
-        return entity.getClan();
+        final String pk = clan.getTag();
+        if(!clanTrackingRepository.exists(pk)){
+            if(clanTrackerCache!=null){
+                clanTrackerCache.add(pk,new TrackerCache.SimpleClanTracker(pk,clan.getName()));
+            }
+            ClanTracking entity = modelMapper.map(clan,ClanTracking.class);
+            entity.setScore(HomeVillageScore.basicScore(clan));
+            clanTrackingRepository.insertOrIgnore(entity);
+        }
+        return pk;
     }
 
     @Override
@@ -65,6 +71,11 @@ public class ClanTrackerImpl implements ClanTracker {
         entity.setScore(HomeVillageScore.totalScore(clan) + BuilderVillageScore.totalScore(clan));
         entity.setName(clan.getName());
         return clanTrackingRepository.save(entity);*/
+
+        final String pk = clan.getTag();
+        if(clanTrackerCache!=null){
+            clanTrackerCache.remove(pk);
+        }
         ClanTracking entity = new ClanTracking();
         entity.setClan(clan.getTag());
         entity.setLastHit(DateTimeUtil.ofJdkDate(DateTimeUtil.utc()));

@@ -24,6 +24,9 @@ public class TrackerCache<T> {
         }
     }
 
+    public T remove(String key){
+        return trackers.remove(key);
+    }
     public List<T> retrieveSome(int max){
         List<T> result = new LinkedList<>();
         synchronized (trackers){
