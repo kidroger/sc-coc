@@ -30,8 +30,9 @@ public interface ClanTrackingRepository extends JpaRepository<ClanTracking,Strin
 
     @Modifying
     @Query(value =
-            "INSERT IGNORE INTO t_clan_tracking(`f_clan_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
-                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score}, NULL, 0)" ,
+            "INSERT INTO t_clan_tracking(`f_clan_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
+                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score}, NULL, 0)" +
+                    "ON DUPLICATE KEY UPDATE z_version = z_version + 1",
             nativeQuery = true)
     int insertOrIgnore(@Param("clanTracking") ClanTracking clanTracking);
 

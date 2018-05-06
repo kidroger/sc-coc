@@ -10,8 +10,9 @@ public interface PlayerTrackingRepository extends JpaRepository<PlayerTracking,S
 
     @Modifying
     @Query(value =
-            "INSERT IGNORE INTO t_player_tracking(`f_player_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
-                    "VALUES (:#{#playerTracking.player},:#{#playerTracking.name},:#{#playerTracking.score},  NULL, 0)" ,
+            "INSERT INTO t_player_tracking(`f_player_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
+                    "VALUES (:#{#playerTracking.player},:#{#playerTracking.name},:#{#playerTracking.score},  NULL, 0)" +
+                    "ON DUPLICATE KEY UPDATE z_version = z_version + 1",
             nativeQuery = true)
     int insertOrIgnore(@Param("playerTracking") PlayerTracking playerTracking);
 

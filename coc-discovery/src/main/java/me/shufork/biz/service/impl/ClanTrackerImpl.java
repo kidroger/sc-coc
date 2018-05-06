@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -85,7 +84,7 @@ public class ClanTrackerImpl implements ClanTracker {
         return entity.getClan();
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW,isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public List<ClanTracking.ClanTracker> retrieveSomeForAutoPull(int count) {
         final Date lastHit = DateTimeUtil.utc().toDate();

@@ -8,6 +8,7 @@ import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -21,14 +22,13 @@ public class ClanServiceImpl implements ClanService {
     private ModelMapper modelMapper;
     @Autowired
     private CocClanRepository cocClanRepository;
-    @Override
+
     public CocClan create(ClanBasicInfoDto source) {
         CocClan entity = modelMapper.map(source,CocClan.class);
         //entity.setVersion(0l);
         return cocClanRepository.save(entity);
     }
 
-    @Override
     public List<CocClan> create(Iterable<? extends ClanBasicInfoDto> source) {
         List<CocClan> forCreate = new LinkedList<>();
         source.forEach(o->{
@@ -39,7 +39,6 @@ public class ClanServiceImpl implements ClanService {
         return cocClanRepository.save(forCreate);
     }
 
-    @Override
     public CocClan createOrUpdate(ClanBasicInfoDto source) {
         CocClan entity = cocClanRepository.findOne(source.getTag());
         if(entity == null){
@@ -54,11 +53,31 @@ public class ClanServiceImpl implements ClanService {
         return cocClanRepository.save(entity);
     }
 
-    @Override
     public List<CocClan> createOrUpdate(Iterable<? extends ClanBasicInfoDto> source) {
         List<CocClan> list = new LinkedList<>();
         source.forEach(o->{
             list.add(createOrUpdate(o));
+        });
+        return list;
+    }
+
+    @Override
+    public String insertOrUpdate(ClanBasicInfoDto source) {
+        CocClan entity = modelMapper.map(source,CocClan.class);
+        if(cocClanRepository.exists(entity.getTag())){
+            cocClanRepository.updateClan(entity);
+        }else{
+            cocClanRepository.insertOrUpdate(entity);
+        }
+        return entity.getTag();
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Override
+    public List<String> insertOrUpdate(Iterable<? extends ClanBasicInfoDto> source) {
+        List<String> list = new LinkedList<>();
+        source.forEach(o->{
+            list.add(insertOrUpdate(o));
         });
         return list;
     }

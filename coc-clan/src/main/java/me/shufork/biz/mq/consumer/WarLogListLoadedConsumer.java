@@ -40,7 +40,7 @@ public class WarLogListLoadedConsumer implements MessageConsumer<WarLogListPaylo
                 .collect(Collectors.toList());
         //List<PlayerBasicInfoDto> players;
         clanFoundPublisher.publishClanFound(clans);
-        clanService.createOrUpdate(clans);
+        clanService.insertOrUpdate(clans);
         warLogService.updateWarLog(warLogList);
     }
 }

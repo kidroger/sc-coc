@@ -33,67 +33,23 @@ public class WarTeamServiceImpl implements WarTeamService {
     private CocWarTeamRepository cocWarTeamRepository;
 
     @Override
-    public CocWarTeam create(WarLogEntryClanVo source) {
-        CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
-        final String pk= EntityKeyUtils.keyOf(entity);
-        entity.setId(pk);
-        return cocWarTeamRepository.save(entity);
-    }
-
-    @Override
-    public List<CocWarTeam> create(Iterable<? extends WarLogEntryClanVo> source) {
-        List<CocWarTeam> warTeams = new LinkedList<>();
-        source.forEach(o->{
-            CocWarTeam warTeam = create(o);
-            if(warTeam!=null){
-                warTeams.add(warTeam);
-            }
-        });
-        return warTeams;
-    }
-
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    @Override
-    public String createOrUpdate(WarLogEntryClanVo source) {
+    public String insertOrUpdate(WarLogEntryClanVo source) {
         CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
         final String pk= EntityKeyUtils.keyOf(entity);
         entity.setId(pk);
         cocWarTeamRepository.insertOrUpdate(entity);
         return pk;
-        /*final String pk = EntityKeyUtils.keyOf(source);
-        if(!cocWarTeamRepository.exists(pk)){
-            create(source);
-            return pk;
-        }
-        cocWarTeamRepository.updatePrivateInfo(pk,source.getAttacks(),source.getExpEarned());
-        return pk;*/
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public List<String> createOrUpdate(Iterable<? extends WarLogEntryClanVo> source) {
+    public List<String> insertOrUpdate(Iterable<? extends WarLogEntryClanVo> source) {
         List<String> ids = new LinkedList<>();
         source.forEach(o->{
-            ids.add(createOrUpdate(o));
+            ids.add(insertOrUpdate(o));
         });
         return ids;
     }
-
-    @Override
-    public CocWarTeam createOrGet(WarLogEntryClanVo source) {
-        final String pk = EntityKeyUtils.keyOf(source);
-        //CocWarTeam entity = cocWarTeamRepository.findOne(pk);
-        return Optional.ofNullable(cocWarTeamRepository.findOne(pk)).orElse(create(source));
-    }
-
-    @Override
-    public List<CocWarTeam> createOrGet(Iterable<? extends WarLogEntryClanVo> source) {
-        List<CocWarTeam> warTeams = new LinkedList<>();
-        source.forEach(o->{
-            warTeams.add( createOrGet(o) );
-        });
-        return warTeams;
-    }
-
     @Transactional(readOnly = true)
     @Override
     public WarTeamVo getOneById(String id) {
@@ -113,4 +69,46 @@ public class WarTeamServiceImpl implements WarTeamService {
         Page<CocWarTeam> result = cocWarTeamRepository.findAllByClanOrderByWarTimeDesc(clanTag,new PageRequest(0,20));
         return result.getContent().stream().map(o->modelMapper.map(o,WarTeamVo.class)).collect(Collectors.toList());
     }
+
+    /*
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public String create(WarLogEntryClanVo source) {
+        CocWarTeam entity = modelMapper.map(source,CocWarTeam.class);
+        final String pk= EntityKeyUtils.keyOf(entity);
+        entity.setId(pk);
+        cocWarTeamRepository.insertOrUpdate(entity);
+        return pk;
+    }
+
+    @Override
+    public List<String> create(Iterable<? extends WarLogEntryClanVo> source) {
+        List<String> warTeams = new LinkedList<>();
+        source.forEach(o->{
+            warTeams.add(create(o));
+        });
+        return warTeams;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public String createOrUpdate(WarLogEntryClanVo source) {
+        final String pk = EntityKeyUtils.keyOf(source);
+        if(cocWarTeamRepository.exists(pk)){
+            cocWarTeamRepository.updatePrivateInfo(pk,source.getAttacks(),source.getExpEarned());
+            return pk;
+        }else{
+            return create(source);
+        }
+    }
+
+    @Override
+    public List<String> createOrUpdate(Iterable<? extends WarLogEntryClanVo> source) {
+        List<String> ids = new LinkedList<>();
+        source.forEach(o->{
+            ids.add(createOrUpdate(o));
+        });
+        return ids;
+    }*/
+
 }

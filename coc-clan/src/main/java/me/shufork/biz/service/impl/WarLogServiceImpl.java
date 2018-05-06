@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -43,8 +44,8 @@ public class WarLogServiceImpl implements WarLogService {
         opponent.setWarTime(CocDateTimeUtil.parse(warLog.getEndTime()).toDate());
         opponent.setOpponent(warLog.getClan().getTag());
 
-        final String homeTeamId = warTeamService.createOrUpdate(clan);
-        final String awayTeamId = warTeamService.createOrUpdate(opponent);
+        final String homeTeamId = warTeamService.insertOrUpdate(clan);
+        final String awayTeamId = warTeamService.insertOrUpdate(opponent);
 
         final String pk = EntityKeyUtils.keyOfWarLog(clan.getTag(),warLog.getEndTime());
 
@@ -75,6 +76,7 @@ public class WarLogServiceImpl implements WarLogService {
         return cocWarLogs;
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public void updateWarLog(Iterable<WarLogEntryDto> warLogs) {
         addWarLogIfMiss(warLogs);

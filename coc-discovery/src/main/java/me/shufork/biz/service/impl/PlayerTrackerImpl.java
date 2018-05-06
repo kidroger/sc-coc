@@ -11,6 +11,7 @@ import me.shufork.common.utils.PlayerScore;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -38,6 +39,7 @@ public class PlayerTrackerImpl implements PlayerTracker {
         return entity.getPlayer();
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public String addOrUpdatePlayer(PlayerDetailedInfoDto player) {
 

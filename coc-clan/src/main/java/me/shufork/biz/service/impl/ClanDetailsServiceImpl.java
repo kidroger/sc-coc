@@ -9,6 +9,7 @@ import me.shufork.common.dto.supercell.coc.ClanDetailedInfoDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
@@ -23,14 +24,12 @@ public class ClanDetailsServiceImpl implements ClanDetailsService {
     @Autowired
     private CocClanDetailsRepository cocClanDetailsRepository;
 
-    @Override
     public CocClanDetails create(ClanDetailedInfoDto source) {
         CocClanDetails entity = modelMapper.map(source,CocClanDetails.class);
         //entity.setVersion(0l);
         return cocClanDetailsRepository.save(entity);
     }
 
-    @Override
     public List<CocClanDetails> create(Iterable<? extends ClanDetailedInfoDto> source) {
         List<CocClanDetails> details = new LinkedList<>();
         source.forEach(o->{
@@ -41,7 +40,6 @@ public class ClanDetailsServiceImpl implements ClanDetailsService {
         return cocClanDetailsRepository.save(details);
     }
 
-    @Override
     public CocClanDetails createOrUpdate(ClanDetailedInfoDto source) {
         CocClanDetails target = cocClanDetailsRepository.findOne(source.getTag());
         if(target == null){
@@ -64,11 +62,46 @@ public class ClanDetailsServiceImpl implements ClanDetailsService {
         return cocClanDetailsRepository.save(target);
     }
 
-    @Override
     public List<CocClanDetails> createOrUpdate(Iterable<? extends ClanDetailedInfoDto> source) {
         List<CocClanDetails> list = new LinkedList<>();
         source.forEach(o->{
             list.add(createOrUpdate(o));
+        });
+        return list;
+    }
+
+    @Override
+    public String insertOrUpdate(ClanDetailedInfoDto source) {
+        final String pk = source.getTag();
+        if(!cocClanDetailsRepository.exists(pk)){
+            CocClanDetails entity = modelMapper.map(source,CocClanDetails.class);
+            cocClanDetailsRepository.insertOrUpdate(entity);
+        }else{
+            CocClanDetails target = cocClanDetailsRepository.findOne(pk);
+            target.setType(source.getType());
+            target.setDescription(source.getDescription());
+            target.setLocation(source.getLocation()==null? CocConstants.LOCATION_ID_INVALID:source.getLocation().getId());
+            target.setClanPoints(source.getClanPoints());
+            target.setClanVersusPoints(source.getClanVersusPoints());
+            target.setRequiredTrophies(source.getRequiredTrophies());
+            target.setWarFrequency(source.getWarFrequency());
+            target.setWarWinStreak(source.getWarWinStreak());
+            target.setWarWins(source.getWarWins());
+            target.setWarTies(source.getWarTies());
+            target.setWarLosses(source.getWarLosses());
+            target.setWarLogPublic(source.isWarLogPublic());
+            target.setTotalMembers(source.getTotalMembers());
+            cocClanDetailsRepository.save(target);
+        }
+        return pk;
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Override
+    public List<String> insertOrUpdate(Iterable<? extends ClanDetailedInfoDto> source) {
+        List<String> list = new LinkedList<>();
+        source.forEach(o->{
+            list.add(insertOrUpdate(o));
         });
         return list;
     }

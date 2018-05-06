@@ -42,8 +42,8 @@ public class ClanDetailedInfoLoadedConsumer implements MessageConsumer<ClanDetai
         final ClanDetailedInfoDto clan = message.getClanDetailedInfo();
         log.trace("handing clan detailed info:tag = {},name = {}",clan.getTag(),clan.getName());
 
-        clanService.createOrUpdate( modelMapper.map(clan,ClanBasicInfoDto.class));
-        clanDetailsService.createOrUpdate(clan);
+        clanService.insertOrUpdate( modelMapper.map(clan,ClanBasicInfoDto.class));
+        clanDetailsService.insertOrUpdate(clan);
 
         CompletableFuture.runAsync(()-> {
             warLogPuller.checkAndPullWarLog(clan);
