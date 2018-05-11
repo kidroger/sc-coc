@@ -33,9 +33,9 @@ info:
 
 liquibase:
   change-log: classpath:db/changelog/changelog.xml
-  default-schema: db_coc_clan
-  drop-first: false
-  enabled: true
+  #default-schema: db_coc_clan
+  #drop-first: false
+  #enabled: true
 
 coc.war-log.auto-load: true
 

@@ -46,9 +46,9 @@ shufork.sc.coc.discovery:
 
 liquibase:
   change-log: classpath:db/changelog/changelog.xml
-  default-schema: db_coc_discovery
-  drop-first: false
-  enabled: true
+  #default-schema: db_coc_discovery
+  #drop-first: false
+  #enabled: true
 
 spring:
   jpa:
