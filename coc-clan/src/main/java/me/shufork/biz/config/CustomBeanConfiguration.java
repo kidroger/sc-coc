@@ -11,16 +11,4 @@ public class CustomBeanConfiguration {
     public HotClans hotClans(){
         return new HotClans(100);
     }
-
-    /*
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/coc/*").allowedOrigins("http://localhost:8080");
-            }
-        };
-    }
-    */
 }

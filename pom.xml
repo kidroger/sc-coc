@@ -37,6 +37,7 @@
         <module>coc-common</module>
         <module>coc-player</module>
         <module>coc-clan</module>
+        <module>coc-clan-war</module>
         <module>coc-discovery</module>
     </modules>
 </project>

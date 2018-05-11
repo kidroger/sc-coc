@@ -2,7 +2,6 @@ package me.shufork.biz.mq.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.mq.publisher.ClanFoundPublisher;
-import me.shufork.biz.service.ClanService;
 import me.shufork.biz.service.WarLogService;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.WarLogEntryDto;
@@ -22,8 +21,6 @@ import java.util.stream.Collectors;
 public class WarLogListLoadedConsumer implements MessageConsumer<WarLogListPayload> {
 
     @Autowired
-    private ClanService clanService;
-    @Autowired
     private WarLogService warLogService;
     @Autowired
     private ClanFoundPublisher clanFoundPublisher;
@@ -40,7 +37,6 @@ public class WarLogListLoadedConsumer implements MessageConsumer<WarLogListPaylo
                 .collect(Collectors.toList());
         //List<PlayerBasicInfoDto> players;
         clanFoundPublisher.publishClanFound(clans);
-        clanService.insertOrUpdate(clans);
         warLogService.updateWarLog(warLogList);
     }
 }

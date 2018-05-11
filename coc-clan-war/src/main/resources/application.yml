@@ -19,36 +19,25 @@
 #
 ###==========================================================================================###
 server:
-  port: 18800
+  port: 18900
 
 logging:
   level:
-    #org.hibernate.SQL: DEBUG
-    #org.hibernate.type: TRACE
     #org.springframework.cache: DEBUG
     #org.asynchttpclient: DEBUG
     org.springframework.amqp.rabbit: INFO
-    me.shufork.biz:
-      config: TRACE
-    #  mq.consumer: TRACE
+    #me.shufork.biz.mq.consumer: TRACE
 
 info:
   version: '@project.version@'
 
-shufork.sc.coc.discovery:
-  enabled: false
-  enableMetrics: true
-  clan-fetch:
-    size: 2
-    error-detect : 1
-    rate: 10000 # in milliseconds
-    init-delay: 30000  # in milliseconds
-
 liquibase:
   change-log: classpath:db/changelog/changelog.xml
-  default-schema: db_coc_discovery
+  default-schema: db_coc_war
   drop-first: false
   enabled: true
+
+coc.war-log.auto-load: true
 
 spring:
   jpa:
@@ -63,33 +52,22 @@ spring:
       default:
         content-type: application/json
       bindings:
-        coc_io_task_created_output:
-          binder: rabbit
-          destination: cocIoTaskCreated
-          producer:
-            required-groups: default
-        coc_clan_found_input:
+        coc_clan_found_output:
           binder: rabbit
           destination: clanFound
-          group: tracker
-        coc_player_found_input:
+          #producer:
+          #  required-groups: tracker
+        coc_war_log_loaded_input:
           binder: rabbit
-          destination: playerFound
-          group: tracker
-        coc_player_detailed_info_loaded_input:
+          destination: warLogLoaded
+          group: default
+        coc_war_log_rejected_input:
           binder: rabbit
-          destination: playerDetailedInfoLoaded
-          group: tracker
-        coc_clan_detailed_info_loaded_input:
-          binder: rabbit
-          destination: clanDetailedInfoLoaded
-          group: tracker
-        coc_state_notification_input:
-          binder: rabbit
-          destination: cocServerStateNotification
+          destination: warLogRejected
+          group: default
       rabbit:
         bindings:
-          coc_clan_found_input:
+          coc_war_log_loaded_input:
             consumer:
               acknowledgeMode: AUTO
               durableSubscription: true
@@ -98,43 +76,15 @@ spring:
               autoBindDlq: true
               republishToDlq: true
               dlqMaxLength: 1000
-          coc_player_found_input:
+          coc_war_log_rejected_input:
             consumer:
               acknowledgeMode: AUTO
               durableSubscription: true
-              prefetch: 1
-              requeueRejected: true
-              autoBindDlq: true
-              republishToDlq: true
-              dlqMaxLength: 1000
-          coc_player_detailed_info_loaded_input:
-            consumer:
-              acknowledgeMode: AUTO
-              durableSubscription: true
-              prefetch: 1
-              requeueRejected: true
-              autoBindDlq: true
-              republishToDlq: true
-              dlqMaxLength: 100
-          coc_clan_detailed_info_loaded_input:
-            consumer:
-              acknowledgeMode: AUTO
-              durableSubscription: true
-              prefetch: 1
-              requeueRejected: true
-              autoBindDlq: true
-              republishToDlq: true
-              dlqMaxLength: 100
-          coc_state_notification_input:
-            consumer:
-              exchangeType: fanout
-              exclusive: true
-              acknowledgeMode: AUTO
-              durableSubscription: false
               prefetch: 1
               requeueRejected: false
               autoBindDlq: false
               republishToDlq: false
+              dlqMaxLength: 100
 
 ---
 spring:
@@ -155,4 +105,3 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 30
-

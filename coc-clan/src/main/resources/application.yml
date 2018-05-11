@@ -57,49 +57,26 @@ spring:
           destination: cocIoTaskCreated
           producer:
             required-groups: default
-        coc_clan_found_output:
-          binder: rabbit
-          destination: clanFound
-          producer:
-            required-groups: default
         coc_player_found_output:
           binder: rabbit
           destination: playerFound
-          producer:
-            required-groups: default
+          #producer:
+          #  required-groups: tracker
+
+        #coc_clan_found_input:
+        #  binder: rabbit
+        #  destination: clanFound
+        #  group: default
         coc_clan_detailed_info_loaded_input:
           binder: rabbit
           destination: clanDetailedInfoLoaded
           group: default
-        coc_war_log_loaded_input:
-          binder: rabbit
-          destination: warLogLoaded
-          group: default
-        coc_war_log_rejected_input:
-          binder: rabbit
-          destination: warLogRejected
-          group: default
       rabbit:
         bindings:
+          #coc_clan_found_input:
+          #  consumer:
+          #    acknowledgeMode: AUTO
           coc_clan_detailed_info_loaded_input:
-            consumer:
-              acknowledgeMode: AUTO
-              durableSubscription: true
-              prefetch: 1
-              requeueRejected: true
-              autoBindDlq: true
-              republishToDlq: true
-              dlqMaxLength: 1000
-          coc_war_log_loaded_input:
-            consumer:
-              acknowledgeMode: AUTO
-              durableSubscription: true
-              prefetch: 1
-              requeueRejected: true
-              autoBindDlq: true
-              republishToDlq: true
-              dlqMaxLength: 1000
-          coc_war_log_rejected_input:
             consumer:
               acknowledgeMode: AUTO
               durableSubscription: true

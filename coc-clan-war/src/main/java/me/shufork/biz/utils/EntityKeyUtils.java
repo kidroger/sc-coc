@@ -1,5 +1,7 @@
 package me.shufork.biz.utils;
 
+import me.shufork.biz.domain.CocWarTeam;
+import me.shufork.biz.vo.WarLogEntryClanVo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -29,4 +31,28 @@ public final class EntityKeyUtils {
                 )
         );
     }
+
+    public static String keyOf(WarLogEntryClanVo val){
+        if(StringUtils.isBlank(val.getTag()) || val.getWarTime() == null ){
+            throw new IllegalStateException("Can not make key");
+        }
+        return makeKey(Arrays.asList(
+                val.getTag(),
+                Long.toString(val.getWarTime().getTime())
+                )
+        );
+    }
+
+    public static String keyOf(CocWarTeam val){
+
+        if(StringUtils.isBlank(val.getClan()) || val.getWarTime() == null ){
+            throw new IllegalStateException("Can not make key");
+        }
+        return makeKey(Arrays.asList(
+                val.getClan(),
+                Long.toString(val.getWarTime().getTime())
+                )
+        );
+    }
+
 }
