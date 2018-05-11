@@ -55,8 +55,8 @@ spring:
         coc_clan_found_output:
           binder: rabbit
           destination: clanFound
-          #producer:
-          #  required-groups: tracker
+          producer:
+            required-groups: tracker
         coc_war_log_loaded_input:
           binder: rabbit
           destination: warLogLoaded
@@ -67,6 +67,9 @@ spring:
           group: default
       rabbit:
         bindings:
+          coc_player_found_output:
+            producer:
+              maxLength: 65535
           coc_war_log_loaded_input:
             consumer:
               acknowledgeMode: AUTO
