@@ -21,7 +21,7 @@ public class ClanDetailedInfoLoadedConsumer implements MessageConsumer<ClanDetai
 
     @Autowired
     @Qualifier("clanFetchErrorDetector")
-    CocDiscoveryAutoConfiguration.FetchErrorDetector fetchErrorDetector;
+    private CocDiscoveryAutoConfiguration.FetchErrorDetector fetchErrorDetector;
     @StreamListener(ClanDetailedInfoLoadedSink.INPUT)
     @Override
     public void handleMessage(ClanDetailedInfoPayload message) {

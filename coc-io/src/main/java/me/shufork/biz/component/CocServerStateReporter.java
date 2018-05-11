@@ -1,6 +1,5 @@
 package me.shufork.biz.component;
 
-import com.ibasco.agql.protocols.supercell.coc.webapi.interfaces.CocClans;
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.common.enums.CocStateEnums;
 import me.shufork.common.mq.payload.notify.CocStateNotificationPayload;
@@ -19,8 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Component
 @Slf4j
 public class CocServerStateReporter {
-    @Autowired
-    private CocClans clanApi;
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private CocStateNotificationSource cocStateNotificationSource;

@@ -8,7 +8,6 @@ import me.shufork.biz.service.CocHeroService;
 import me.shufork.biz.service.PlayerHeroService;
 import me.shufork.common.dto.supercell.coc.TroopDto;
 import me.shufork.common.utils.CocHashTagUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PlayerHeroServiceImpl implements PlayerHeroService {
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private CocPlayerHeroRepository cocPlayerHeroRepository;

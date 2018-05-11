@@ -8,7 +8,6 @@ import me.shufork.biz.service.CocSpellService;
 import me.shufork.biz.service.PlayerSpellService;
 import me.shufork.common.dto.supercell.coc.TroopDto;
 import me.shufork.common.utils.CocHashTagUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PlayerSpellServiceImpl implements PlayerSpellService {
-    @Autowired
-    private ModelMapper modelMapper;
     @Autowired
     private CocPlayerSpellRepository cocPlayerSpellRepository;
     @Autowired

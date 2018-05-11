@@ -6,30 +6,21 @@ import me.shufork.biz.domain.CocSpell;
 import me.shufork.biz.domain.CocTroop;
 import me.shufork.common.dto.supercell.coc.TroopDto;
 import me.shufork.common.enums.CocArmyTypeEnums;
+import me.shufork.common.utils.KeyBuilder;
 import me.shufork.common.vo.PlayerAchievementsVo;
 import me.shufork.common.vo.PlayerTroopVo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public final class EntityKeyUtils {
-    private static final String KEY_JOIN_CHAR = "-";
-
     private EntityKeyUtils(){}
-    private static String makeKey(List<String> strings){
-        return strings.stream()
-                .map(o-> StringUtils.trimToNull(o.toLowerCase()))
-                .filter(o-> !StringUtils.isBlank(o))
-                .collect(Collectors.joining(KEY_JOIN_CHAR));
-    }
 
     public static String keyOf(PlayerAchievementsVo val){
         if(StringUtils.isBlank(val.getOwner()) || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey (Arrays.asList(
                 val.getVillage(),
                 val.getOwner(),
                 val.getName()
@@ -41,7 +32,7 @@ public final class EntityKeyUtils {
         if(StringUtils.isBlank(val.getOwner()) || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 val.getOwner(),
                 val.getName()
@@ -53,7 +44,7 @@ public final class EntityKeyUtils {
         if(val.getMaxLevel() <= 0 || val.getLevel() <= 0 || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 type.getValue(),
                 val.getName(),
@@ -65,7 +56,7 @@ public final class EntityKeyUtils {
         if(val.getMaxLevel() <= 0 || val.getLevel() <= 0 || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 type.getValue(),
                 val.getName(),
@@ -78,7 +69,7 @@ public final class EntityKeyUtils {
         if(val.getMaxLevel() <= 0 || val.getLevel() <= 0 || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 CocArmyTypeEnums.TROOP.getValue(),
                 val.getName(),
@@ -91,7 +82,7 @@ public final class EntityKeyUtils {
         if(val.getMaxLevel() <= 0 || val.getLevel() <= 0 || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 CocArmyTypeEnums.SPELL.getValue(),
                 val.getName(),
@@ -104,7 +95,7 @@ public final class EntityKeyUtils {
         if(val.getMaxLevel() <= 0 || val.getLevel() <= 0 || StringUtils.isBlank(val.getName()) || StringUtils.isBlank(val.getVillage())){
             throw new IllegalStateException("Can not make key");
         }
-        return makeKey(Arrays.asList(
+        return KeyBuilder.makeKey(Arrays.asList(
                 val.getVillage(),
                 CocArmyTypeEnums.HERO.getValue(),
                 val.getName(),

@@ -2,7 +2,6 @@ package me.shufork.biz.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.shufork.biz.domain.CocPlayer;
-import me.shufork.biz.repository.CocLeagueRepository;
 import me.shufork.biz.repository.CocPlayerRepository;
 import me.shufork.biz.service.PlayerService;
 import me.shufork.common.constants.CocConstants;
@@ -20,9 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
-
-    @Autowired
-    private CocLeagueRepository cocLeagueRepository;
     @Autowired
     private CocPlayerRepository cocPlayerRepository;
     @Autowired
