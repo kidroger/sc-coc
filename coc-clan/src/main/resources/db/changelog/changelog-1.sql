@@ -57,3 +57,17 @@ CREATE INDEX idx_top_win_streak ON t_clan_details ( f_war_win_streak );
 CREATE INDEX idx_top_war_wins ON t_clan_details ( f_war_wins );
 CREATE INDEX idx_top_war_ties ON t_clan_details ( f_war_ties );
 CREATE INDEX idx_top_war_losses ON t_clan_details ( f_war_losses );
+
+
+--changeset cj:2
+
+-- t_clan
+ALTER TABLE `t_clan`
+CHANGE COLUMN `f_tag` `f_tag` VARCHAR(24) NOT NULL ,
+CHANGE COLUMN `f_name` `f_name` VARCHAR(64) NOT NULL ;
+
+-- t_clan_details
+ALTER TABLE `t_clan_details`
+CHANGE COLUMN `f_tag` `f_tag` VARCHAR(24) NOT NULL ,
+CHANGE COLUMN `f_type` `f_type` VARCHAR(24) NULL DEFAULT NULL ,
+CHANGE COLUMN `f_war_frequency` `f_war_frequency` VARCHAR(32) NULL DEFAULT NULL ;

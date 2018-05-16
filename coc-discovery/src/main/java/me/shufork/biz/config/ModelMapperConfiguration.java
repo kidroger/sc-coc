@@ -2,6 +2,7 @@ package me.shufork.biz.config;
 
 import me.shufork.biz.domain.ClanTracking;
 import me.shufork.biz.domain.PlayerTracking;
+import me.shufork.common.constants.CocConstants;
 import me.shufork.common.dto.supercell.coc.ClanBasicInfoDto;
 import me.shufork.common.dto.supercell.coc.PlayerBasicInfoDto;
 import org.modelmapper.ModelMapper;
@@ -23,7 +24,7 @@ public class ModelMapperConfiguration {
             target.setPlayer(source.getTag());
             target.setName(source.getName());
             target.setScore(0);
-            target.setLastHit(null);
+            target.setLastHit(CocConstants.EPOCH);
             return target;
         });
         modelMapper.createTypeMap(ClanBasicInfoDto.class,ClanTracking.class).setConverter(mappingContext -> {
@@ -33,7 +34,7 @@ public class ModelMapperConfiguration {
             target.setClan(source.getTag());
             target.setName(source.getName());
             target.setScore(0);
-            target.setLastHit(null);
+            target.setLastHit(CocConstants.EPOCH);
             return target;
         });
         return modelMapper;

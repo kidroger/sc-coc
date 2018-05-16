@@ -31,7 +31,7 @@ public interface ClanTrackingRepository extends JpaRepository<ClanTracking,Strin
     @Modifying
     @Query(value =
             "INSERT INTO t_clan_tracking(`f_clan_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
-                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score}, NULL, 0)" +
+                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score},:#{#clanTracking.lastHit}, 0)" +
                     "ON DUPLICATE KEY UPDATE z_version = z_version + 1",
             nativeQuery = true)
     int insertOrIgnore(@Param("clanTracking") ClanTracking clanTracking);
@@ -39,7 +39,7 @@ public interface ClanTrackingRepository extends JpaRepository<ClanTracking,Strin
     @Modifying
     @Query(value =
             "INSERT INTO t_clan_tracking(`f_clan_tag`, `f_name`, `f_score`, `f_last_hit_time`, `z_version`) " +
-                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score},NULL,  0)" +
+                    "VALUES (:#{#clanTracking.clan}, :#{#clanTracking.name},:#{#clanTracking.score},:#{#clanTracking.lastHit},  0)" +
                     "ON DUPLICATE KEY UPDATE f_last_hit_time = :#{#clanTracking.lastHit},f_score = :#{#clanTracking.score} ,z_version = z_version + 1",
             nativeQuery = true)
     int insertOrUpdate(@Param("clanTracking") ClanTracking clanTracking);

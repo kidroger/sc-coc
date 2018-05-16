@@ -29,16 +29,16 @@ public class CocWarLog {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_id")
+    @Column(name = "f_id",length = 64)
     private String id;//tag(home team ) + end time
 
-    @Column(name = "f_home_team",nullable = false)
+    @Column(name = "f_home_team",nullable = false,length = 64)
     private String homeTeam;
 
-    @Column(name = "f_away_team",nullable = false)
+    @Column(name = "f_away_team",nullable = false,length = 64)
     private String awayTeam;
 
-    @Column(name = "f_result")
+    @Column(name = "f_result",length = 24)
     private String result;
 
     @Column(name = "f_end_time")
@@ -48,6 +48,6 @@ public class CocWarLog {
     @Column(name = "f_team_size")
     private int teamSize;
 
-    @Column(name = "f_owner",nullable = false)
+    @Column(name = "f_owner",nullable = false,length = 24)
     private String owner;
 }

@@ -29,10 +29,10 @@ public class ClanTracking {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_clan_tag")
+    @Column(name = "f_clan_tag",length = 24)
     private String clan;
 
-    @Column(name = "f_name",nullable = false)
+    @Column(name = "f_name",nullable = false,length = 64)
     private String name;
 
     @Column(name = "f_score")

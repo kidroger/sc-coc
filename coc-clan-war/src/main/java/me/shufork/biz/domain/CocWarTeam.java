@@ -30,20 +30,20 @@ public class CocWarTeam {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_id")
+    @Column(name = "f_id",length = 64)
     private String id; //tag+warTime
 
-    @Column(name = "f_opponent_team", nullable = false)
+    @Column(name = "f_opponent_team", nullable = false,length = 24)
     private String opponent;
 
     @Column(name = "f_war_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date warTime;
 
-    @Column(name = "f_clan", nullable = false)
+    @Column(name = "f_clan", nullable = false,length = 24)
     private String clan;
 
-    @Column(name = "f_name")
+    @Column(name = "f_name",length = 64)
     private String name;
 
     @Column(name = "f_badge_small")

@@ -29,10 +29,10 @@ public class CocClanDetails {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_tag")
+    @Column(name = "f_tag",length = 24)
     private String tag;
 
-    @Column(name = "f_type")
+    @Column(name = "f_type",length = 24)
     private String type;
 
     @Column(name = "f_description",columnDefinition = "TEXT")
@@ -50,7 +50,7 @@ public class CocClanDetails {
     @Column(name = "f_required_trophies")
     private int requiredTrophies;
 
-    @Column(name = "f_war_frequency")
+    @Column(name = "f_war_frequency",length = 32)
     private String warFrequency;
 
     @Column(name = "f_war_win_streak")

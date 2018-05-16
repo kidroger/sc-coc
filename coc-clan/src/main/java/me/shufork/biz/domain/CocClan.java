@@ -34,10 +34,10 @@ public class CocClan {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_tag")
+    @Column(name = "f_tag",length = 24)
     private String tag;
 
-    @Column(name = "f_name",nullable = false)
+    @Column(name = "f_name",nullable = false,length = 64)
     private String name;
 
     @Column(name = "f_clan_level",nullable = false)

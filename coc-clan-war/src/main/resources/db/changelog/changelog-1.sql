@@ -56,3 +56,26 @@ CREATE INDEX idx_qry_teams ON t_war_log ( f_owner,f_end_time,f_home_team, f_away
 
 -- t_war_team
 CREATE INDEX idx_qry_opponent ON t_war_team ( f_war_time,f_opponent_team );
+
+
+--changeset cj:2
+-- t_war_log
+ALTER TABLE `t_war_log`
+CHANGE COLUMN `f_id` `f_id` VARCHAR(64) NOT NULL ,
+CHANGE COLUMN `f_away_team` `f_away_team` VARCHAR(64) NOT NULL ,
+CHANGE COLUMN `f_home_team` `f_home_team` VARCHAR(64) NOT NULL ,
+CHANGE COLUMN `f_owner` `f_owner` VARCHAR(24) NOT NULL ,
+CHANGE COLUMN `f_result` `f_result` VARCHAR(24) NULL DEFAULT NULL ;
+
+ALTER TABLE `t_war_log`
+ROW_FORMAT = COMPRESSED ;
+
+-- t_war_team
+ALTER TABLE `t_war_team`
+CHANGE COLUMN `f_id` `f_id` VARCHAR(64) NOT NULL  ,
+CHANGE COLUMN `f_name` `f_name` VARCHAR(64) NOT NULL ,
+CHANGE COLUMN `f_clan` `f_clan` VARCHAR(24) NOT NULL ,
+CHANGE COLUMN `f_opponent_team` `f_opponent_team` VARCHAR(24) NOT NULL ;
+
+ALTER TABLE `t_war_team`
+ROW_FORMAT = COMPRESSED ;

@@ -29,10 +29,10 @@ public class PlayerTracking {
     private Date modifiedTime;
 
     @Id
-    @Column(name = "f_player_tag")
+    @Column(name = "f_player_tag",length = 24)
     private String player;
 
-    @Column(name = "f_name",nullable = false)
+    @Column(name = "f_name",nullable = false,length = 64)
     private String name;
 
     @Column(name = "f_score")
