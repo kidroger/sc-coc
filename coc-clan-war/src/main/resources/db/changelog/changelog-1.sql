@@ -79,3 +79,13 @@ CHANGE COLUMN `f_opponent_team` `f_opponent_team` VARCHAR(24) NOT NULL ;
 
 ALTER TABLE `t_war_team`
 ROW_FORMAT = COMPRESSED ;
+
+--changeset cj:3
+--preconditions onFail:MARK_RAN onError:HALT
+--precondition-sql-check expectedResult:0 SELECT count(*) FROM information_schema.partitions WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME = 't_war_log' AND PARTITION_NAME IS NOT NULL
+ALTER TABLE t_war_log PARTITION BY KEY ( f_id ) PARTITIONS 32;
+
+--changeset cj:4
+--preconditions onFail:MARK_RAN onError:HALT
+--precondition-sql-check expectedResult:0 SELECT count(*) FROM information_schema.partitions WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME = 't_war_team' AND PARTITION_NAME IS NOT NULL
+ALTER TABLE t_war_team PARTITION BY KEY ( f_id ) PARTITIONS 32;
