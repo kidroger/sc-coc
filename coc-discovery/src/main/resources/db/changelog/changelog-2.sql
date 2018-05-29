@@ -42,9 +42,9 @@ CHANGE COLUMN `f_last_hit_time` `f_last_hit_time` DATETIME NOT NULL DEFAULT '197
 --changeset cj:4
 --preconditions onFail:MARK_RAN onError:HALT
 --precondition-sql-check expectedResult:0 SELECT count(*) FROM information_schema.partitions WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME = 't_clan_tracking' AND PARTITION_NAME IS NOT NULL
-ALTER TABLE t_clan_tracking PARTITION BY KEY ( f_clan_tag ) PARTITIONS 16;
+ALTER TABLE t_clan_tracking PARTITION BY KEY ( f_clan_tag ) PARTITIONS 15;
 
 --changeset cj:5
 --preconditions onFail:MARK_RAN onError:HALT
 --precondition-sql-check expectedResult:0 SELECT count(*) FROM information_schema.partitions WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME = 't_player_tracking' AND PARTITION_NAME IS NOT NULL
-ALTER TABLE t_player_tracking PARTITION BY KEY ( f_player_tag ) PARTITIONS 16;
+ALTER TABLE t_player_tracking PARTITION BY KEY ( f_player_tag ) PARTITIONS 15;
