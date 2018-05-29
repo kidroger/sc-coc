@@ -88,7 +88,7 @@ public class ClanTrackerImpl implements ClanTracker {
     @Override
     public List<ClanTracking.ClanTracker> retrieveSomeForAutoPull(int count) {
         final Date lastHit = DateTimeUtil.utc().toDate();
-        Page<ClanTracking.ClanTracker> pageResult = clanTrackingRepository.findAllByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class,new PageRequest(0,count));
+        Page<ClanTracking.ClanTracker> pageResult = clanTrackingRepository.findAllByOrderByLastHitAscScoreDesc(ClanTracking.ClanTracker.class,new PageRequest(0,Math.max(1,count)));
         List<ClanTracking.ClanTracker> trackers = pageResult.getContent();
         trackers.forEach(o->clanTrackingRepository.updateLastHit(o.getClan(),lastHit));
         return trackers;
